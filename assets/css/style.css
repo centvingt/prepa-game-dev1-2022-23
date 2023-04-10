@@ -72,14 +72,14 @@ canvas,
 }
 .cross-controller {
     display: grid;
-    width: 74px;
-    height: 74px;
+    width: 120px;
+    height: 120px;
     place-self: end end;
-    margin: 0 20% 10px 0;
+    margin: 0 10% 10px 0;
 }
 .cross-controller > img {
     grid-area: 1 / 1 / 2 / 2;
-    width: auto;
+    width: 50px;
 }
 .cross-controller__up {
     place-self: start center;
@@ -99,16 +99,16 @@ canvas,
 
 .ab-buttons {
     display: grid;
-    width: 80px;
-    height: 80px;
+    width: 120px;
+    height: 120px;
     place-self: end start;
-    margin: 0 0 10px 20%;
+    margin: 0 0 10px 10%;
 }
 .ab-buttons > button {
-    width: 44px;
-    height: 44px;
+    width: 65px;
+    height: 65px;
     display: grid;
-    font-size: 32px;
+    font-size: 36px;
     color: var(--dark-purple-color);
     background-color: var(--light-purple-color);
     border: solid 4px var(--dark-purple-color);
