@@ -1,4 +1,4 @@
-const cacheName = '230410-1022'
+const cacheName = '230410-1126'
 self.addEventListener('install', (event) => {
   console.log('Service worker installing...')
   event.waitUntil(
@@ -43,14 +43,11 @@ self.addEventListener('install', (event) => {
         .then(() =>
           console.log('sw.js > cache.addAll > données mises en cache')
         )
-        .catch((error) => console.log('sw.js > cache.addAll > error >', error))
+      // .catch((error) => console.log('sw.js > cache.addAll > error >', error))
     })
   )
 })
-// self.addEventListener('fetch', (event) => {
-//   console.log('fetch')
-//   event.respondWith(caches.match(event.request))
-// })
+
 self.addEventListener('fetch', (event) => {
   // Prevent the default, and handle the request ourselves.
   event.respondWith(
@@ -73,16 +70,14 @@ self.addEventListener('fetch', (event) => {
 
         const cache = await caches.open(cacheName)
 
-        const put = await cache.put(event.request, fetchResponse)
-
-        console.log('sw.js > put >', put)
+        await cache.put(event.request, fetchResponse)
 
         return fetchResponse.clone()
       } catch (error) {
-        console.error(
-          'sw.js > fetch event listener > ' + event.request + ' > error >',
-          error
-        )
+        // console.error(
+        //   'sw.js > fetch event listener > ' + event.request + ' > error >',
+        //   error
+        // )
       }
     })()
   )

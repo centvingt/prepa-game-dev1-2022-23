@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<html lang="fr-FR" manifest="/cache.manifest">
-    <!-- <html lang="fr-FR"> -->
+<!-- <html lang="fr-FR" manifest="/cache.manifest"> -->
+<html lang="fr-FR">
     <head>
         <link rel="manifest" href="/manifest.webmanifest" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
         <link rel="apple-touch-icon" href="./assets/img/icon-192x192.png" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta
+            name="apple-mobile-web-app-status-bar-style"
+            content="black-translucent"
+        />
+        <meta name="theme-color" content="#5028A3" />
 
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,7 +21,6 @@
         <link rel="stylesheet" href="./assets/css/reset.css" />
         <link rel="stylesheet" href="./assets/css/style.css" />
         <script src="./assets/js/main.js" defer type="module"></script>
-        <meta name="theme-color" content="red" />
 
         <link
             rel="shortcut icon"
@@ -25,7 +29,9 @@
         />
     </head>
     <body>
-        <p class="log"></p>
+        <p class="portrait-warning">
+            ↪︎ Tournez votre téléphone pour l’orienter en mode paysage ↩︎
+        </p>
         <canvas></canvas>
         <img
             class="screen-stroke"

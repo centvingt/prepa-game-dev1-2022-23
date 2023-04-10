@@ -1,6 +1,6 @@
 {
-    "background_color": "red",
-    "theme_color": "red",
+    "background_color": "#5028A3",
+    "theme_color": "#5028A3",
     "orientation": "landscape",
     "description": "Les bananes déferlent sur la ville, éliminez-les jusqu’à la dernière !",
     "display": "standalone",
