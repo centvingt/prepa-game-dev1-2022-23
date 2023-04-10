@@ -79,7 +79,7 @@ export class InputHandler {
     })
     bBtn.addEventListener('touchend', () => {
       this.keys.delete(Key.Space)
-      bBtn.classList.delete('pressed')
+      bBtn.classList.remove('pressed')
     })
   }
 }
