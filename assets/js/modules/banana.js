@@ -31,8 +31,7 @@ export class Banana {
     if (this.isAlive) {
       this.ctx.drawImage(
         this.image,
-        this.frameIndex * this.width,
-        // 0,
+        this.sourceX,
         this.sourceY,
         this.width,
         this.height,
@@ -51,6 +50,7 @@ export class Banana {
   update(timeStamp, deltaTime) {
     if (this.isAlive) {
       this.frameIndex = Math.floor(timeStamp / this.fps) % this.framesLength
+      this.sourceX = this.frameIndex * this.width
 
       this.destinationX -= (deltaTime * this.speed) / 1000
 

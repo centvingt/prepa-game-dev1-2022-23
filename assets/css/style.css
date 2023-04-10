@@ -5,7 +5,10 @@
 
 :root {
     --light-purple-color: #b057ef;
+    --middle-purple-color: #823fbd;
+    --dark-purple-color: #5028a3;
     --dark-blue-color: #1d1a7d;
+    --light-blue-color: #61ddff;
     --app-height: 100vh;
 }
 
@@ -16,11 +19,12 @@ body {
     justify-items: center;
     min-height: 100vh;
     min-height: 100dvh;
-    background: linear-gradient(
+    /* background: linear-gradient(
         251.35deg,
         var(--light-purple-color) 1.05%,
         var(--dark-blue-color) 101.22%
-    );
+    ); */
+    background-color: var(--dark-blue-color);
     padding: 30px;
     font-family: vcr, monospace;
     color: #fff;
@@ -35,6 +39,11 @@ body {
     user-select: none; /* Non-prefixed version, currently
                                         supported by Chrome, Edge, Opera and Firefox */
 }
+.game {
+    display: grid;
+    grid-area: 1 / 1 / 2 / 2;
+    grid-template-columns: 1fr 3fr 1fr;
+}
 canvas {
     aspect-ratio: 480 / 360;
     -webkit-mask: url(../img/screen-mask.svg) center/contain no-repeat;
@@ -42,16 +51,73 @@ canvas {
 }
 canvas,
 .screen-stroke {
-    width: 60%;
     max-width: 800px;
     max-height: calc(100vh - 60px);
     max-height: calc(100dvh - 60px);
-    grid-area: 1 / 1 / 2 / 2;
+    grid-area: 1 / 2 / 2 / 3;
 }
 .screen-stroke {
     z-index: 1;
     mix-blend-mode: screen;
 }
+.cross-controller {
+    display: grid;
+    width: 74px;
+    height: 74px;
+    place-self: end end;
+    margin: 0 20% 10px 0;
+}
+.cross-controller > img {
+    grid-area: 1 / 1 / 2 / 2;
+    width: auto;
+}
+.cross-controller__up {
+    place-self: start center;
+    transform: rotate(90deg);
+}
+.cross-controller__right {
+    place-self: center end;
+    transform: rotate(180deg);
+}
+.cross-controller__down {
+    place-self: end center;
+    transform: rotate(-90deg);
+}
+.cross-controller__left {
+    place-self: center start;
+}
+
+.ab-buttons {
+    display: grid;
+    width: 80px;
+    height: 80px;
+    place-self: end start;
+    margin: 0 0 10px 20%;
+}
+.ab-buttons > button {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    font-size: 32px;
+    color: var(--dark-purple-color);
+    background-color: var(--light-purple-color);
+    border: solid 4px var(--dark-purple-color);
+    align-items: center;
+    text-align: center;
+    border-radius: 50%;
+    padding-bottom: 4px;
+}
+.ab-buttons > button.pressed {
+    background-color: var(--light-blue-color);
+    box-shadow: inset 0px 0px 16px var(--middle-purple-color);
+}
+.a-btn {
+    place-self: start start;
+}
+.b-btn {
+    place-self: end end;
+}
+
 .desktop-instructions {
     margin-top: 16px;
     width: 60%;
@@ -64,16 +130,6 @@ canvas,
 }
 
 @media screen and (min-width: 320px) and (max-width: 767px) and (orientation: portrait) {
-    /* html {
-        transform: rotate(-90deg);
-        transform-origin: left top;
-        width: 100vh;
-        height: 100vw;
-        overflow-x: hidden;
-        position: absolute;
-        top: 100%;
-        left: 0;
-    } */
     .portrait-warning {
         display: grid;
         align-items: center;

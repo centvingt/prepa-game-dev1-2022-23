@@ -4,4 +4,5 @@ export const Key = Object.freeze({
   ArrowLeft: 'ArrowLeft',
   ArrowRight: 'ArrowRight',
   Space: 'Space',
+  Enter: 'Enter',
 })
