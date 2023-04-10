@@ -1,0 +1,50 @@
+@font-face {
+    font-family: vcr;
+    src: url('../fonts/VCR_OSD_MONO_1.001.ttf');
+}
+
+:root {
+    --light-purple-color: #b057ef;
+    --dark-blue-color: #1d1a7d;
+}
+
+body {
+    display: grid;
+    align-items: center;
+    align-content: center;
+    justify-items: center;
+    min-height: 100vh;
+    background: linear-gradient(
+        251.35deg,
+        var(--light-purple-color) 1.05%,
+        var(--dark-blue-color) 101.22%
+    );
+    padding: 30px;
+    font-family: vcr, monospace;
+    color: #fff;
+    font-size: 20px;
+    text-align: center;
+}
+canvas {
+    aspect-ratio: 480 / 360;
+    -webkit-mask: url(../img/screen-mask.svg) center/contain no-repeat;
+    mask: url(../img/screen-mask.svg) center/contain no-repeat;
+}
+canvas,
+.screen-stroke {
+    width: 60%;
+    max-width: 800px;
+    max-height: calc(100vh - 60px);
+    grid-area: 1 / 1 / 2 / 2;
+}
+.screen-stroke {
+    z-index: 1;
+    mix-blend-mode: screen;
+}
+.desktop-instructions {
+    margin-top: 16px;
+    width: 60%;
+    max-width: 800px;
+    align-self: start;
+    display: none;
+}
