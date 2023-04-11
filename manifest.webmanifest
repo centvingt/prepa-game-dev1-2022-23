@@ -4,8 +4,8 @@
     "orientation": "landscape",
     "description": "Les bananes déferlent sur la ville, éliminez-les jusqu’à la dernière !",
     "display": "standalone",
-    "name": "L’attaque des bananes tueuses",
-    "short_name": "Les bananes tueuses",
+    "name": "LAttaqueDesBananesTueuses",
+    "short_name": "LesBananesTueuses",
     "start_url": "/",
     "scope": ".",
     "icons": [

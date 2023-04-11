@@ -77,9 +77,12 @@ canvas,
     place-self: end end;
     margin: 0 10% 10px 0;
 }
-.cross-controller > img {
-    grid-area: 1 / 1 / 2 / 2;
+.cross-controller img {
     width: 50px;
+}
+.cross-controller > button {
+    grid-area: 1 / 1 / 2 / 2;
+    background-color: transparent;
 }
 .cross-controller__up {
     place-self: start center;

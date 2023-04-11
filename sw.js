@@ -1,12 +1,12 @@
-const cacheName = '230410-2206'
+const cacheName = '230411-1016'
 self.addEventListener('install', (event) => {
   console.log('Service worker installing...')
   event.waitUntil(async () => {
     try {
       const cache = awaitcaches.open(cacheName)
       await cache.addAll([
-        '/index.html',
         '/sw.js',
+        '/index.html',
         '/manifest.webmanifest',
         '/assets/css/reset.css',
         '/assets/css/style.css',
@@ -50,19 +50,15 @@ self.addEventListener('install', (event) => {
 })
 
 self.addEventListener('fetch', (event) => {
-  // Prevent the default, and handle the request ourselves.
+  if (event.request.url.startsWith('chrome-extension')) return
+
   event.respondWith(
     (async () => {
       try {
-        // Try to get the response from a cache.
-        const cachedResponse = await caches.match(event.request, {
-          ignoreSearch: true,
-        })
+        const cachedResponse = await caches.match(event.request)
 
-        // Return it if we found one.
         if (cachedResponse) return cachedResponse
 
-        // If we didn't find a match in the cache, use the network.
         // console.log('sw.js > no cache >', event.request.url)
 
         const fetchResponse = await fetch(event.request)
@@ -71,9 +67,11 @@ self.addEventListener('fetch', (event) => {
 
         const cache = await caches.open(cacheName)
 
+        const response = fetchResponse.clone()
+
         await cache.put(event.request, fetchResponse)
 
-        return fetchResponse.clone()
+        return response
       } catch (error) {
         console.error(
           'sw.js > fetch event listener > ' + event.request.url + ' > error >',
