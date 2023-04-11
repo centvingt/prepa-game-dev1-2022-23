@@ -11,7 +11,9 @@
     --light-blue-color: #61ddff;
     --app-height: 100vh;
 }
-
+* {
+    -webkit-tap-highlight-color: transparent;
+}
 body {
     display: grid;
     align-items: center;
