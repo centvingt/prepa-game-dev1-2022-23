@@ -27,7 +27,7 @@ body {
         var(--dark-blue-color) 101.22%
     ); */
     background-color: var(--dark-blue-color);
-    padding: 30px;
+    padding: 20px;
     font-family: vcr, monospace;
     color: #fff;
     font-size: 20px;
@@ -45,6 +45,7 @@ body {
     display: grid;
     grid-area: 1 / 1 / 2 / 2;
     grid-template-columns: 1fr 3fr 1fr;
+    /* width: 100%; */
 }
 .game.desktop {
     grid-template-columns: 1fr;
@@ -74,8 +75,8 @@ canvas,
 }
 .cross-controller {
     display: grid;
-    width: 120px;
-    height: 120px;
+    width: 100%;
+    aspect-ratio: 1 / 1;
     place-self: end end;
     margin: 0 10% 10px 0;
 }
@@ -83,7 +84,7 @@ canvas,
 .cross-controller > input {
     grid-area: 1 / 1 / 2 / 2;
     background-color: transparent;
-    width: 50px;
+    width: 45%;
 }
 .cross-controller__up {
     place-self: start center;
@@ -103,16 +104,17 @@ canvas,
 
 .ab-buttons {
     display: grid;
-    width: 120px;
-    height: 120px;
+    width: 100%;
+    aspect-ratio: 1 / 0.9;
     place-self: end start;
     margin: 0 0 10px 10%;
 }
 .ab-buttons > button {
-    width: 65px;
-    height: 65px;
+    grid-area: 1 / 1 / 2 / 2;
+    width: 50%;
+    aspect-ratio: 1 / 1;
     display: grid;
-    font-size: 36px;
+    font-size: 40px;
     color: var(--dark-purple-color);
     background-color: var(--light-purple-color);
     border: solid 4px var(--dark-purple-color);
