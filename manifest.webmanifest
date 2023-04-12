@@ -5,7 +5,7 @@
     "description": "Les bananes déferlent sur la ville, éliminez-les jusqu’à la dernière !",
     "display": "standalone",
     "name": "LAttaqueDesBananesTueuses",
-    "short_name": "LesBananesTueuses",
+    "short_name": "LAttaqueDesBananesTueuses",
     "start_url": "/",
     "scope": ".",
     "icons": [
