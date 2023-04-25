@@ -28,7 +28,7 @@ export class Banana {
    * @param {CanvasRenderingContext2D} ctx
    */
   draw() {
-    if (this.isAlive) {
+    if (this.isActive) {
       this.ctx.drawImage(
         this.image,
         this.sourceX,
@@ -48,24 +48,24 @@ export class Banana {
    * @param {number} deltaTime
    */
   update(timeStamp, deltaTime) {
-    if (this.isAlive) {
+    if (this.isActive) {
       this.frameIndex = Math.floor(timeStamp / this.fps) % this.framesLength
       this.sourceX = this.frameIndex * this.width
 
       this.destinationX -= (deltaTime * this.speed) / 1000
 
-      if (this.destinationX < -this.width) this.isAlive = false
+      if (this.destinationX < -this.width) this.isActive = false
 
       //   if (this.destinationX < -this.width) this.initialize()
     }
   }
   initialize() {
-    this.isAlive = true
+    this.isActive = true
     this.destinationX = this.game.width
     this.destinationY = Math.random() * (this.game.height - this.height)
     this.speed = Math.random() * 50 + 100
   }
   start() {
-    this.isAlive = true
+    this.isActive = true
   }
 }

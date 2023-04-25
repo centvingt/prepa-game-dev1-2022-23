@@ -1,4 +1,5 @@
 import { Backgrounds } from './backgrounds.js'
+import { BananaPool } from './banana-pool.js'
 import { Banana } from './banana.js'
 import { InputHandler } from './input-handler.js'
 import { Key } from './key.js'
@@ -24,8 +25,7 @@ export class Game {
 
     this.player = new Player(this.canvas.width, this.canvas.height)
 
-    /** @type {Banana[]} */
-    this.bananas = []
+    this.bananaPool = new BananaPool()
 
     this.initializeBananaTimer()
 
@@ -50,16 +50,8 @@ export class Game {
 
       this.backgrounds.animate(deltaTime)
 
-      this.bananaTime += deltaTime
-      if (this.bananaTime >= this.nextBananaTime) {
-        this.bananas.push(new Banana(this))
-        this.initializeBananaTimer()
-      }
-      for (const banana of this.bananas) {
-        banana.draw()
-        banana.update(timeStamp, deltaTime)
-      }
-      this.bananas.filter((banana) => banana.isAlive)
+      this.bananaPool.render(timeStamp, deltaTime)
+
       this.player.draw(this.ctx)
       this.player.update(timeStamp, this.inputHandler)
     }
