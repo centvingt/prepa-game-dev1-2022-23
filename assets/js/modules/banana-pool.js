@@ -19,32 +19,31 @@ export class BananaPool {
    * @param {number} deltaTime
    */
   render(timeStamp, deltaTime) {
-    if (this.bananaTime > this.nextBananaTime) {
+    if (this.bananaTimer > this.nextBananaTime) {
       this.activateNewBanana()
       this.resetTimer()
     } else {
       this.bananaTimer += deltaTime
     }
 
-    for (const banana of this.bananas) {
-      if (banana.isActive) {
-        banana.draw()
-        banana.update(timeStamp, deltaTime)
-      }
+    for (const banana of this.bananas.filter((b) => b.isActive)) {
+      banana.draw()
+      banana.update(timeStamp, deltaTime)
     }
   }
 
   resetTimer = () => {
-    this.bananaTime = 0
+    this.bananaTimer = 0
     this.nextBananaTime = Math.random() * 50 + 500
   }
 
   activateNewBanana = () => {
-    let banana = this.bananas.find((b) => !b.isActive)
-    if (!banana) {
-      banana = new Banana(this.game)
-      this.bananas.push(banana)
-    }
-    banana.isActive = true
+    // const index = this.bananas.findIndex((b) => !b.isActive)
+    // if (index === -1) this.bananas.push(new Banana(this.game))
+    // else this.bananas[index].initialize()
+
+    const banana = this.bananas.find((b) => !b.isActive)
+    if (banana) banana.initialize()
+    else this.bananas.push(new Banana(this.game))
   }
 }

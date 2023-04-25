@@ -1,3 +1,4 @@
+import { BananaPool } from './banana-pool.js'
 import { InputHandler } from './input-handler.js'
 import { Key } from './key.js'
 
@@ -14,12 +15,20 @@ export class Player {
   framesLength = 8
   fps = 1000 / 12
 
+  collision = false
+  maxCollisionBlink = 3
+  collisionBlinkDuration = 500
+  lastBlinkTimestamp = 0
+  elapsedBlinkTime = 0
+  isHidden = false
+
   /**
    * Description
    * @param {number} canvasWidth
    * @param {number} canvasHeight
+   * @param {BananaPool} bananaPool
    */
-  constructor(canvasWidth, canvasHeight) {
+  constructor(canvasWidth, canvasHeight, bananaPool) {
     this.image = new Image()
     this.image.src = './assets/img/player-spritesheet@2x.png'
 
@@ -30,6 +39,8 @@ export class Player {
     this.frameHeight = 72
     this.maxDestinationX = this.canvasWidth - this.frameWidth
     this.maxDestinationY = this.canvasHeight - this.frameHeight
+
+    this.bananaPool = bananaPool
   }
 
   /**
@@ -37,6 +48,8 @@ export class Player {
    * @param {CanvasRenderingContext2D} ctx
    */
   draw(ctx) {
+    if (this.isHidden) return
+
     ctx.drawImage(
       this.image,
       this.frameIndex * this.frameWidth * 2,
@@ -69,5 +82,50 @@ export class Player {
     if (this.destinationY < 0) this.destinationY = 0
     if (this.destinationY > this.maxDestinationY)
       this.destinationY = this.maxDestinationY
+
+    if (!this.collision) this.collision = this.isACollision()
+    else {
+      if (this.lastBlinkTimestamp === 0) this.lastBlinkTimestamp = timeStamp
+
+      this.elapsedBlinkTime += timeStamp - this.lastBlinkTimestamp
+
+      const collisionBlink = Math.floor(
+        this.elapsedBlinkTime / this.collisionBlinkDuration
+      )
+
+      if (collisionBlink >= this.maxCollisionBlink) {
+        this.collision = false
+        this.isHidden = false
+        this.lastBlinkTimestamp = 0
+        this.elapsedBlinkTime = 0
+      }
+
+      this.isHidden = collisionBlink % 2 === 0
+
+      this.lastBlinkTimestamp = timeStamp
+    }
+  }
+
+  /**
+   * Retourne true si le joueur percute une banane
+   * @returns {boolean}
+   */
+  isACollision = () => {
+    for (const banana of this.bananaPool.bananas) {
+      if (
+        !banana.isActive ||
+        this.destinationX > banana.destinationX + banana.width ||
+        this.destinationX + this.frameWidth < banana.destinationX ||
+        this.destinationY > banana.destinationY + banana.height ||
+        this.destinationY + this.frameHeight < banana.destinationY
+      )
+        continue
+      else {
+        banana.isActive = false
+        return true
+      }
+    }
+
+    return false
   }
 }

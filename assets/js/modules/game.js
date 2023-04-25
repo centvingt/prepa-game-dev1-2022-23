@@ -23,9 +23,13 @@ export class Game {
 
     this.backgrounds = new Backgrounds(this.ctx)
 
-    this.player = new Player(this.canvas.width, this.canvas.height)
+    this.bananaPool = new BananaPool(this)
 
-    this.bananaPool = new BananaPool()
+    this.player = new Player(
+      this.canvas.width,
+      this.canvas.height,
+      this.bananaPool
+    )
 
     this.initializeBananaTimer()
 
