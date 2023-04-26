@@ -27,8 +27,9 @@ export class Player {
    * @param {number} canvasWidth
    * @param {number} canvasHeight
    * @param {BananaPool} bananaPool
+   * @param {() => void} decreaseLife
    */
-  constructor(canvasWidth, canvasHeight, bananaPool) {
+  constructor(canvasWidth, canvasHeight, bananaPool, decreaseLife) {
     this.image = new Image()
     this.image.src = './assets/img/player-spritesheet@2x.png'
 
@@ -41,6 +42,8 @@ export class Player {
     this.maxDestinationY = this.canvasHeight - this.frameHeight
 
     this.bananaPool = bananaPool
+
+    this.decreaseLife = decreaseLife
   }
 
   /**
@@ -83,7 +86,7 @@ export class Player {
     if (this.destinationY > this.maxDestinationY)
       this.destinationY = this.maxDestinationY
 
-    if (!this.collision) this.collision = this.isACollision()
+    if (!this.collision) this.collision = this.collisionIsDetected()
     else {
       if (this.lastBlinkTimestamp === 0) this.lastBlinkTimestamp = timeStamp
 
@@ -110,7 +113,7 @@ export class Player {
    * Retourne true si le joueur percute une banane
    * @returns {boolean}
    */
-  isACollision = () => {
+  collisionIsDetected = () => {
     for (const banana of this.bananaPool.bananas) {
       if (
         !banana.isActive ||
@@ -122,6 +125,7 @@ export class Player {
         continue
       else {
         banana.isActive = false
+        this.decreaseLife()
         return true
       }
     }

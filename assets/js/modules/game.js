@@ -1,8 +1,8 @@
 import { Backgrounds } from './backgrounds.js'
 import { BananaPool } from './banana-pool.js'
-import { Banana } from './banana.js'
 import { InputHandler } from './input-handler.js'
 import { Key } from './key.js'
+import { Life } from './life.js'
 import { Player } from './player.js'
 
 export class Game {
@@ -18,6 +18,8 @@ export class Game {
     /** @type {CanvasRenderingContext2D} */
     this.ctx = this.canvas.getContext('2d')
 
+    this.life = new Life()
+
     this.isPaused = false
     this.inputHandler = new InputHandler()
 
@@ -28,7 +30,8 @@ export class Game {
     this.player = new Player(
       this.canvas.width,
       this.canvas.height,
-      this.bananaPool
+      this.bananaPool,
+      this.life.decrease
     )
 
     this.initializeBananaTimer()
