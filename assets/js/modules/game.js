@@ -3,6 +3,7 @@ import { BananaPool } from './banana-pool.js'
 import { InputHandler } from './input-handler.js'
 import { Key } from './key.js'
 import { Life } from './life.js'
+import { PeaPool } from './pea-pool.js'
 import { Player } from './player.js'
 
 export class Game {
@@ -26,12 +27,15 @@ export class Game {
     this.backgrounds = new Backgrounds(this.ctx)
 
     this.bananaPool = new BananaPool(this)
+    this.peaPool = new PeaPool(this)
 
     this.player = new Player(
       this.canvas.width,
       this.canvas.height,
       this.bananaPool,
-      this.life.decrease
+      this.life.decrease,
+      this.peaPool.shoot,
+      this.peaPool.disableAllPeas
     )
 
     this.initializeBananaTimer()
@@ -58,6 +62,7 @@ export class Game {
       this.backgrounds.animate(deltaTime)
 
       this.bananaPool.render(timeStamp, deltaTime)
+      this.peaPool.render(timeStamp, deltaTime)
 
       this.player.draw(this.ctx)
       this.player.update(timeStamp, this.inputHandler)

@@ -1,6 +1,7 @@
 import { BananaPool } from './banana-pool.js'
 import { InputHandler } from './input-handler.js'
 import { Key } from './key.js'
+import { PeaPool } from './pea-pool.js'
 
 export class Player {
   ammunitionLoading = true
@@ -28,8 +29,17 @@ export class Player {
    * @param {number} canvasHeight
    * @param {BananaPool} bananaPool
    * @param {() => void} decreaseLife
+   * @param {(timesStamp: number, playerX: number, playerY: number) => void} shoot
+   * @param {() => void} disableAllPeas
    */
-  constructor(canvasWidth, canvasHeight, bananaPool, decreaseLife) {
+  constructor(
+    canvasWidth,
+    canvasHeight,
+    bananaPool,
+    decreaseLife,
+    shoot,
+    disableAllPeas
+  ) {
     this.image = new Image()
     this.image.src = './assets/img/player-spritesheet@2x.png'
 
@@ -44,6 +54,8 @@ export class Player {
     this.bananaPool = bananaPool
 
     this.decreaseLife = decreaseLife
+    this.shoot = shoot
+    this.disableAllPeas = disableAllPeas
   }
 
   /**
@@ -86,6 +98,9 @@ export class Player {
     if (this.destinationY > this.maxDestinationY)
       this.destinationY = this.maxDestinationY
 
+    if (inputHandler.keys.has(Key.Space) && !this.collision)
+      this.shoot(timeStamp, this.destinationX, this.destinationY)
+
     if (!this.collision) this.collision = this.collisionIsDetected()
     else {
       if (this.lastBlinkTimestamp === 0) this.lastBlinkTimestamp = timeStamp
@@ -125,6 +140,7 @@ export class Player {
         continue
       else {
         banana.isActive = false
+        this.disableAllPeas()
         this.decreaseLife()
         return true
       }
