@@ -20,6 +20,8 @@ export class Banana {
     this.image = new Image()
     this.image.src = './assets/img/banana-spritesheet.png'
 
+    this.increaseScore = this.game.score.increase
+
     this.initialize()
   }
 
@@ -51,7 +53,10 @@ export class Banana {
 
     this.destinationX -= (deltaTime * this.speed) / 1000
 
-    if (this.destinationX < -this.width) this.isActive = false
+    if (this.destinationX < -this.width) {
+      this.isActive = false
+      this.increaseScore(-2)
+    }
   }
   initialize() {
     this.isActive = true

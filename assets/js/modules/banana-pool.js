@@ -34,7 +34,7 @@ export class BananaPool {
 
   resetTimer = () => {
     this.bananaTimer = 0
-    this.nextBananaTime = Math.random() * 50 + 500
+    this.nextBananaTime = Math.random() * 500 + 1500
   }
 
   activateNewBanana = () => {

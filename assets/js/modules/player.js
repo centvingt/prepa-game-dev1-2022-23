@@ -1,7 +1,6 @@
 import { BananaPool } from './banana-pool.js'
 import { InputHandler } from './input-handler.js'
 import { Key } from './key.js'
-import { PeaPool } from './pea-pool.js'
 
 export class Player {
   ammunitionLoading = true

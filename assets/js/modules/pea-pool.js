@@ -14,6 +14,7 @@ export class PeaPool {
   constructor(game) {
     this.game = game
     this.bananas = this.game.bananaPool.bananas
+    this.increaseScore = this.game.score.increase
   }
 
   /**
@@ -23,8 +24,6 @@ export class PeaPool {
    */
   render(timeStamp, deltaTime) {
     for (const pea of this.peas.filter((p) => p.isActive)) {
-      pea.draw()
-      pea.update(timeStamp, deltaTime)
       for (const banana of this.bananas) {
         if (
           !banana.isActive ||
@@ -37,8 +36,12 @@ export class PeaPool {
         } else {
           pea.isActive = false
           banana.isActive = false
+          this.increaseScore(1)
         }
       }
+
+      pea.draw()
+      pea.update(timeStamp, deltaTime)
     }
   }
 

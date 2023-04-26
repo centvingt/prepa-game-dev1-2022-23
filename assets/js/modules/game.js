@@ -5,9 +5,9 @@ import { Key } from './key.js'
 import { Life } from './life.js'
 import { PeaPool } from './pea-pool.js'
 import { Player } from './player.js'
+import { Score } from './score.js'
 
 export class Game {
-  score = 0
   gameOver = false
 
   constructor() {
@@ -25,6 +25,8 @@ export class Game {
     this.inputHandler = new InputHandler()
 
     this.backgrounds = new Backgrounds(this.ctx)
+
+    this.score = new Score()
 
     this.bananaPool = new BananaPool(this)
     this.peaPool = new PeaPool(this)
