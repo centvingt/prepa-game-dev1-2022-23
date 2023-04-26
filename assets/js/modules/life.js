@@ -2,6 +2,9 @@ export class Life {
   constructor() {
     this.value = 3
 
+    /** @type {HTMLDivElement} */
+    this.ui = document.querySelector('.life')
+
     /** @type {HTMLSpanElement} */ this.label =
       document.querySelector('.life>span')
 
@@ -13,7 +16,10 @@ export class Life {
   decrease = () => {
     this.value--
     if (this.value < 1) this.value = 0
+
     this.setUi()
+    this.ui.style.opacity = 0
+    setTimeout(() => (this.ui.style.opacity = 1), 300)
   }
   setUi = () => {
     this.label.innerText = this.value

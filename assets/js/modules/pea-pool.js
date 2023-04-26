@@ -13,6 +13,7 @@ export class PeaPool {
    */
   constructor(game) {
     this.game = game
+    this.bananas = this.game.bananaPool.bananas
   }
 
   /**
@@ -24,6 +25,20 @@ export class PeaPool {
     for (const pea of this.peas.filter((p) => p.isActive)) {
       pea.draw()
       pea.update(timeStamp, deltaTime)
+      for (const banana of this.bananas) {
+        if (
+          !banana.isActive ||
+          pea.destinationX > banana.destinationX + banana.width ||
+          pea.destinationX + pea.frameWidth - 20 < banana.destinationX ||
+          pea.destinationY > banana.destinationY + banana.height ||
+          pea.destinationY + pea.frameHeight < banana.destinationY
+        ) {
+          continue
+        } else {
+          pea.isActive = false
+          banana.isActive = false
+        }
+      }
     }
   }
 
