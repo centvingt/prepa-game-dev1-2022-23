@@ -93,16 +93,16 @@ export class Player {
         this.elapsedBlinkTime / this.collisionBlinkDuration
       )
 
+      this.isHidden = collisionBlink % 2 === 0
+
+      this.lastBlinkTimestamp = timeStamp
+
       if (collisionBlink >= this.maxCollisionBlink) {
         this.collision = false
         this.isHidden = false
         this.lastBlinkTimestamp = 0
         this.elapsedBlinkTime = 0
       }
-
-      this.isHidden = collisionBlink % 2 === 0
-
-      this.lastBlinkTimestamp = timeStamp
     }
   }
 
