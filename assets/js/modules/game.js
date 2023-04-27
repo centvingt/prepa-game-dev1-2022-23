@@ -1,5 +1,6 @@
 import { Backgrounds } from './backgrounds.js'
 import { BananaPool } from './banana-pool.js'
+import { GlitchOverlay } from './glitch-overlay.js'
 import { InputHandler } from './input-handler.js'
 import { Key } from './key.js'
 import { Life } from './life.js'
@@ -27,6 +28,8 @@ export class Game {
     this.backgrounds = new Backgrounds(this.ctx)
 
     this.score = new Score()
+
+    this.glitchOverlay = new GlitchOverlay(this.ctx, this.life)
 
     this.bananaPool = new BananaPool(this)
     this.peaPool = new PeaPool(this)
@@ -68,6 +71,8 @@ export class Game {
 
       this.player.draw(this.ctx)
       this.player.update(timeStamp, this.inputHandler)
+
+      this.glitchOverlay.render(timeStamp)
     }
 
     window.requestAnimationFrame(this.animate)

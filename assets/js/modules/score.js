@@ -1,7 +1,7 @@
 export class Score {
   constructor() {
     this.value = 0
-    this.maxValue = 30
+    this.maxValue = 50
 
     /** @type {HTMLInputElement} */
     this.rangeInput = document.querySelector('#level')

@@ -6,7 +6,7 @@ export class PeaPool {
   peas = []
 
   lastTimestamp = 0
-  minInterval = 300
+  minInterval = 200
 
   /**
    * @param {Game} game
