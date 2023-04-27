@@ -15,8 +15,14 @@ export class Banana {
   constructor(game) {
     this.game = game
     this.ctx = this.game.ctx
-    this.width = 49
-    this.height = 54
+
+    this.sourceWidth = 49
+    this.sourceHeight = 54
+
+    const scaleFactor = Math.random() * 0.3 + 0.85
+    this.destinationWidth = this.sourceWidth * scaleFactor
+    this.destinationHeight = this.sourceHeight * scaleFactor
+
     this.image = new Image()
     this.image.src = './assets/img/banana-spritesheet.png'
 
@@ -34,12 +40,12 @@ export class Banana {
       this.image,
       this.sourceX,
       this.sourceY,
-      this.width,
-      this.height,
+      this.sourceWidth,
+      this.sourceHeight,
       this.destinationX,
       this.destinationY,
-      this.width,
-      this.height
+      this.destinationWidth,
+      this.destinationHeight
     )
   }
 
@@ -49,11 +55,11 @@ export class Banana {
    */
   update(timeStamp, deltaTime) {
     this.frameIndex = Math.floor(timeStamp / this.fps) % this.framesLength
-    this.sourceX = this.frameIndex * this.width
+    this.sourceX = this.frameIndex * this.sourceWidth
 
     this.destinationX -= (deltaTime * this.speed) / 1000
 
-    if (this.destinationX < -this.width) {
+    if (this.destinationX < -this.destinationWidth) {
       this.isActive = false
       this.increaseScore(-2)
     }
@@ -61,7 +67,8 @@ export class Banana {
   initialize() {
     this.isActive = true
     this.destinationX = this.game.width
-    this.destinationY = Math.random() * (this.game.height - this.height)
+    this.destinationY =
+      Math.random() * (this.game.height - this.destinationHeight)
     this.speed = Math.random() * 50 + 100
   }
 }

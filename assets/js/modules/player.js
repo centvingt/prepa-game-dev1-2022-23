@@ -131,9 +131,11 @@ export class Player {
     for (const banana of this.bananaPool.bananas) {
       if (
         !banana.isActive ||
-        this.destinationX - 20 > banana.destinationX + banana.width ||
+        this.destinationX - 20 >
+          banana.destinationX + banana.destinationWidth ||
         this.destinationX + this.frameWidth - 20 < banana.destinationX ||
-        this.destinationY - 20 > banana.destinationY + banana.height ||
+        this.destinationY - 20 >
+          banana.destinationY + banana.destinationHeight ||
         this.destinationY + this.frameHeight - 20 < banana.destinationY
       )
         continue

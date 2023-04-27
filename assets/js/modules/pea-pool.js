@@ -27,9 +27,9 @@ export class PeaPool {
       for (const banana of this.bananas) {
         if (
           !banana.isActive ||
-          pea.destinationX > banana.destinationX + banana.width ||
+          pea.destinationX > banana.destinationX + banana.destinationWidth ||
           pea.destinationX + pea.frameWidth - 20 < banana.destinationX ||
-          pea.destinationY > banana.destinationY + banana.height ||
+          pea.destinationY > banana.destinationY + banana.destinationHeight ||
           pea.destinationY + pea.frameHeight < banana.destinationY
         ) {
           continue
