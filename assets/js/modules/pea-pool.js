@@ -1,5 +1,6 @@
 import { Pea } from './pea.js'
 import { Game } from './game.js'
+import { BananaState } from './banana.js'
 
 export class PeaPool {
   /** @type {Pea[]} */
@@ -27,6 +28,7 @@ export class PeaPool {
       for (const banana of this.bananas) {
         if (
           !banana.isActive ||
+          banana.state === BananaState.killed ||
           pea.destinationX > banana.destinationX + banana.destinationWidth ||
           pea.destinationX + pea.frameWidth - 20 < banana.destinationX ||
           pea.destinationY > banana.destinationY + banana.destinationHeight ||
@@ -35,7 +37,7 @@ export class PeaPool {
           continue
         } else {
           pea.isActive = false
-          banana.isActive = false
+          banana.state = BananaState.killed
           this.increaseScore(1)
         }
       }

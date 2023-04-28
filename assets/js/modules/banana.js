@@ -8,6 +8,9 @@ export class Banana {
   framesLength = 16
   fps = 1000 / 12
 
+  maxBlink = 5
+  blinkDuration = 250
+
   /**
    * Description
    * @param {Game} game
@@ -36,6 +39,8 @@ export class Banana {
    * @param {CanvasRenderingContext2D} ctx
    */
   draw() {
+    if (this.isHidden) return
+
     this.ctx.drawImage(
       this.image,
       this.sourceX,
@@ -59,16 +64,45 @@ export class Banana {
 
     this.destinationX -= (deltaTime * this.speed) / 1000
 
+    if (this.state === BananaState.killed) {
+      if (this.lastBlinkTimestamp === 0) this.lastBlinkTimestamp = timeStamp
+
+      this.elapsedBlinkTime += timeStamp - this.lastBlinkTimestamp
+
+      const collisionBlink = Math.floor(
+        this.elapsedBlinkTime / this.blinkDuration
+      )
+
+      this.isHidden = collisionBlink % 2 === 0
+
+      this.lastBlinkTimestamp = timeStamp
+
+      if (collisionBlink >= this.maxBlink) this.isActive = false
+    }
+
+    this.sourceY = this.sourceHeight * this.state
+
     if (this.destinationX < -this.destinationWidth) {
       this.isActive = false
       this.increaseScore(-2)
     }
   }
+
   initialize() {
     this.isActive = true
     this.destinationX = this.game.width
     this.destinationY =
       Math.random() * (this.game.height - this.destinationHeight)
     this.speed = Math.random() * 50 + 100
+
+    this.state = BananaState.normal
+    this.lastBlinkTimestamp = 0
+    this.elapsedBlinkTime = 0
+    this.isHidden = false
   }
 }
+
+export const BananaState = Object.freeze({
+  normal: 0,
+  killed: 1,
+})

@@ -1,4 +1,5 @@
 import { BananaPool } from './banana-pool.js'
+import { BananaState } from './banana.js'
 import { InputHandler } from './input-handler.js'
 import { Key } from './key.js'
 
@@ -137,6 +138,7 @@ export class Player {
     for (const banana of this.bananaPool.bananas) {
       if (
         !banana.isActive ||
+        banana.state === BananaState.killed ||
         this.destinationX >
           banana.destinationX + banana.destinationWidth - 20 ||
         this.destinationX + this.frameWidth - 20 < banana.destinationX ||
