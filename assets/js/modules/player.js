@@ -15,9 +15,9 @@ export class Player {
   framesLength = 8
   fps = 1000 / 12
 
-  collision = false
-  maxCollisionBlink = 3
-  collisionBlinkDuration = 500
+  state = PlayerState.normal
+  maxBlink = 7
+  blinkDuration = 300
   lastBlinkTimestamp = 0
   elapsedBlinkTime = 0
   isHidden = false
@@ -40,7 +40,7 @@ export class Player {
     disableAllPeas
   ) {
     this.image = new Image()
-    this.image.src = './assets/img/player-spritesheet@2x.png'
+    this.image.src = './assets/img/player-spritesheet.png'
 
     this.canvasWidth = canvasWidth
     this.canvasHeight = canvasHeight
@@ -66,10 +66,10 @@ export class Player {
 
     ctx.drawImage(
       this.image,
-      this.frameIndex * this.frameWidth * 2,
+      this.sourceX,
       this.sourceY,
-      this.frameWidth * 2,
-      this.frameHeight * 2,
+      this.frameWidth,
+      this.frameHeight,
       this.destinationX,
       this.destinationY,
       this.frameWidth,
@@ -84,6 +84,9 @@ export class Player {
    */
   update(timeStamp, inputHandler) {
     this.frameIndex = Math.floor(timeStamp / this.fps) % this.framesLength
+    this.sourceX = this.frameIndex * this.frameWidth
+
+    this.sourceY = this.frameHeight * this.state
 
     if (inputHandler.keys.has(Key.ArrowDown)) this.destinationY += this.speed
     if (inputHandler.keys.has(Key.ArrowUp)) this.destinationY -= this.speed
@@ -97,25 +100,28 @@ export class Player {
     if (this.destinationY > this.maxDestinationY)
       this.destinationY = this.maxDestinationY
 
-    if (inputHandler.keys.has(Key.Space) && !this.collision)
+    if (inputHandler.keys.has(Key.Space) && this.state === PlayerState.normal)
       this.shoot(timeStamp, this.destinationX, this.destinationY)
 
-    if (!this.collision) this.collision = this.collisionIsDetected()
-    else {
+    // if (!this.collision) this.collision = this.collisionIsDetected()
+
+    if (this.state === PlayerState.normal && this.collisionIsDetected())
+      this.state = PlayerState.collision
+    if (this.state === PlayerState.collision) {
       if (this.lastBlinkTimestamp === 0) this.lastBlinkTimestamp = timeStamp
 
       this.elapsedBlinkTime += timeStamp - this.lastBlinkTimestamp
 
       const collisionBlink = Math.floor(
-        this.elapsedBlinkTime / this.collisionBlinkDuration
+        this.elapsedBlinkTime / this.blinkDuration
       )
 
       this.isHidden = collisionBlink % 2 === 0
 
       this.lastBlinkTimestamp = timeStamp
 
-      if (collisionBlink >= this.maxCollisionBlink) {
-        this.collision = false
+      if (collisionBlink >= this.maxBlink) {
+        this.state = PlayerState.normal
         this.isHidden = false
         this.lastBlinkTimestamp = 0
         this.elapsedBlinkTime = 0
@@ -150,3 +156,9 @@ export class Player {
     return false
   }
 }
+
+const PlayerState = Object.freeze({
+  normal: 0,
+  collision: 1,
+  peaLoad: 2,
+})
