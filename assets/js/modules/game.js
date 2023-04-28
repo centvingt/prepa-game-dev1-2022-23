@@ -4,14 +4,20 @@ import { GlitchOverlay } from './glitch-overlay.js'
 import { InputHandler } from './input-handler.js'
 import { Key } from './key.js'
 import { Life } from './life.js'
+import { Opener } from './opener.js'
 import { PeaPool } from './pea-pool.js'
 import { Player } from './player.js'
 import { Score } from './score.js'
 
 export class Game {
-  gameOver = false
+  state = GameState.opener
 
-  constructor() {
+  /**
+   * @param {boolean} deviceIsMobile
+   */
+  constructor(deviceIsMobile) {
+    this.deviceIsMobile = deviceIsMobile
+
     /** @type {HTMLCanvasElement} */
     this.canvas = document.querySelector('canvas')
     this.canvas.width = this.width = 480
@@ -30,6 +36,8 @@ export class Game {
     this.score = new Score()
 
     this.glitchOverlay = new GlitchOverlay(this.ctx, this.life)
+
+    this.opener = new Opener(this)
 
     this.bananaPool = new BananaPool(this)
     this.peaPool = new PeaPool(this)
@@ -54,7 +62,8 @@ export class Game {
    */
   animate = (timeStamp) => {
     if (this.inputHandler.keys.has(Key.Enter)) {
-      this.isPaused = !this.isPaused
+      if (this.state === GameState.opener) this.state = GameState.level1
+      else this.isPaused = !this.isPaused
       this.inputHandler.keys.delete(Key.Enter)
     }
 
@@ -66,13 +75,19 @@ export class Game {
 
       this.backgrounds.animate(deltaTime)
 
-      this.bananaPool.render(timeStamp, deltaTime)
-      this.peaPool.render(timeStamp, deltaTime)
+      if (this.state === GameState.level1) {
+        this.bananaPool.render(timeStamp, deltaTime)
+        this.peaPool.render(timeStamp, deltaTime)
 
-      this.player.draw(this.ctx)
-      this.player.update(timeStamp, this.inputHandler)
+        this.player.draw(this.ctx)
+        this.player.update(timeStamp, this.inputHandler)
+      }
 
       this.glitchOverlay.render(timeStamp)
+
+      if (this.state === GameState.opener) {
+        this.opener.render(timeStamp)
+      }
     }
 
     window.requestAnimationFrame(this.animate)
@@ -83,3 +98,8 @@ export class Game {
     this.nextBananaTime = Math.random() * 50 + 500
   }
 }
+const GameState = Object.freeze({
+  opener: 'opener',
+  level1: 'level1',
+  bossLevel1: 'bossLevel1',
+})

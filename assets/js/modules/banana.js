@@ -1,3 +1,4 @@
+import { BlinkHandler } from './blink-handler.js'
 import { Game } from './game.js'
 
 export class Banana {
@@ -8,8 +9,10 @@ export class Banana {
   framesLength = 16
   fps = 1000 / 12
 
-  maxBlink = 5
-  blinkDuration = 250
+  maxBlink = 3
+  blinkDuration = 150
+
+  blinkHandler = new BlinkHandler(250, 5)
 
   /**
    * Description
@@ -39,7 +42,7 @@ export class Banana {
    * @param {CanvasRenderingContext2D} ctx
    */
   draw() {
-    if (this.isHidden) return
+    if (this.blinkHandler.isHidden) return
 
     this.ctx.drawImage(
       this.image,
@@ -65,19 +68,7 @@ export class Banana {
     this.destinationX -= (deltaTime * this.speed) / 1000
 
     if (this.state === BananaState.killed) {
-      if (this.lastBlinkTimestamp === 0) this.lastBlinkTimestamp = timeStamp
-
-      this.elapsedBlinkTime += timeStamp - this.lastBlinkTimestamp
-
-      const collisionBlink = Math.floor(
-        this.elapsedBlinkTime / this.blinkDuration
-      )
-
-      this.isHidden = collisionBlink % 2 === 0
-
-      this.lastBlinkTimestamp = timeStamp
-
-      if (collisionBlink >= this.maxBlink) this.isActive = false
+      this.isActive = this.blinkHandler.checkCurrentBlink(timeStamp)
     }
 
     this.sourceY = this.sourceHeight * this.state
@@ -85,6 +76,7 @@ export class Banana {
     if (this.destinationX < -this.destinationWidth) {
       this.isActive = false
       this.increaseScore(-2)
+      this.blinkHandler.reset()
     }
   }
 
@@ -96,9 +88,6 @@ export class Banana {
     this.speed = Math.random() * 50 + 100
 
     this.state = BananaState.normal
-    this.lastBlinkTimestamp = 0
-    this.elapsedBlinkTime = 0
-    this.isHidden = false
   }
 }
 

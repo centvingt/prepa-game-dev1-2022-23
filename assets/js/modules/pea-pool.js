@@ -6,9 +6,6 @@ export class PeaPool {
   /** @type {Pea[]} */
   peas = []
 
-  lastTimestamp = 0
-  minInterval = 200
-
   /**
    * @param {Game} game
    */
@@ -48,19 +45,11 @@ export class PeaPool {
   }
 
   /**
-   * @param {number} timesStamp
    * @param {number} playerX
    * @param {number} playerY
    * @returns {void}
    */
-  shoot = (timesStamp, playerX, playerY) => {
-    if (timesStamp - this.lastTimestamp < this.minInterval) {
-      this.lastTimestamp = timesStamp
-      return
-    }
-
-    this.lastTimestamp = timesStamp
-
+  shoot = (playerX, playerY) => {
     const pea = this.peas.find((p) => !p.isActive)
     if (pea) pea.initialize(playerX, playerY)
     else this.peas.push(new Pea(this.game, playerX, playerY))
