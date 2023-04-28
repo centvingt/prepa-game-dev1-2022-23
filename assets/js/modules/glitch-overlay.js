@@ -38,17 +38,8 @@ class Glitch {
     this.image = new Image()
     this.image.src = `./assets/img/glitch-life-${numberOfLifes}.png`
 
-    this.clipImage = new Image()
-    this.clipImage.src = './assets/img/glitch-clip.svg'
-
     this.ctx = ctx
     this.framesLength = framesLength
-
-    this.offScrCan = document.createElement('canvas')
-    const { width, height } = this.ctx.canvas
-    this.offScrCan.width = width
-    this.offScrCan.height = height
-    this.offScrCtxt = this.offScrCan.getContext('2d')
   }
 
   render = (timesStamp) => {
@@ -57,9 +48,7 @@ class Glitch {
   }
 
   draw = () => {
-    this.offScrCtxt.drawImage(this.clipImage, 0, 0)
-    this.offScrCtxt.globalCompositeOperation = 'source-in'
-    this.offScrCtxt.drawImage(
+    this.ctx.drawImage(
       this.image,
       this.frameX,
       this.frameY,
@@ -70,8 +59,6 @@ class Glitch {
       this.frameWidth,
       this.frameHeight
     )
-    this.offScrCtxt.globalCompositeOperation = 'source-over'
-    this.ctx.drawImage(this.offScrCan, 0, 0)
   }
 
   update = (timeStamp) => {
