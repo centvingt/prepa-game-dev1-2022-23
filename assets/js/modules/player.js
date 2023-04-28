@@ -136,17 +136,17 @@ export class Player {
    */
   collisionIsDetected = () => {
     for (const banana of this.bananaPool.bananas) {
-      if (
-        !banana.isActive ||
-        banana.state === BananaState.killed ||
+      const collisionCondition =
         this.destinationX >
           banana.destinationX + banana.destinationWidth - 20 ||
         this.destinationX + this.frameWidth - 20 < banana.destinationX ||
         this.destinationY >
           banana.destinationY + banana.destinationHeight - 20 ||
         this.destinationY + this.frameHeight - 20 < banana.destinationY
-      )
-        continue
+      if (banana.state === BananaState.killed && !collisionCondition) {
+        banana.isActive = false
+      }
+      if (!banana.isActive || collisionCondition) continue
       else {
         banana.isActive = false
         this.disableAllPeas()
