@@ -129,14 +129,6 @@ export class Player {
    */
   collisionIsDetected = () => {
     for (const banana of this.bananaPool.bananas) {
-      const collisionCondition =
-        this.destinationX >
-          banana.destinationX + banana.destinationWidth - 20 ||
-        this.destinationX + this.frameWidth - 20 < banana.destinationX ||
-        this.destinationY >
-          banana.destinationY + banana.destinationHeight - 20 ||
-        this.destinationY + this.frameHeight - 20 < banana.destinationY
-
       if (
         !banana.isActive ||
         this.destinationX >
@@ -147,7 +139,6 @@ export class Player {
         this.destinationY + this.frameHeight - 20 < banana.destinationY
       )
         continue
-      else if (banana.state === BananaState.killed) continue
       else {
         banana.isActive = false
         this.disableAllPeas()
@@ -162,7 +153,7 @@ export class Player {
 
 const PlayerState = Object.freeze({
   normal: Symbol(0),
-  collision: Symbol(1),
-  peaLoad: Symbol(2),
-  shoot: Symbol(2),
+  shoot: Symbol(1),
+  collision: Symbol(2),
+  peaLoad: Symbol(3),
 })

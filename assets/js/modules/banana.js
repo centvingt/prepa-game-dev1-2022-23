@@ -10,9 +10,9 @@ export class Banana {
   fps = 1000 / 12
 
   maxBlink = 3
-  blinkDuration = 150
+  blinkDuration = 100
 
-  blinkHandler = new BlinkHandler(250, 5)
+  blinkHandler = new BlinkHandler(100, 3)
 
   /**
    * Description
@@ -81,12 +81,12 @@ export class Banana {
   }
 
   initialize() {
-    this.isActive = true
     this.destinationX = this.game.width
     this.destinationY =
       Math.random() * (this.game.height - this.destinationHeight)
     this.speed = Math.random() * 50 + 100
 
+    this.isActive = true
     this.state = BananaState.normal
   }
 }
