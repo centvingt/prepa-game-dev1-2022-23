@@ -9,13 +9,9 @@ export class Banana {
   framesLength = 16
   fps = 1000 / 12
 
-  maxBlink = 3
-  blinkDuration = 100
-
   blinkHandler = new BlinkHandler(100, 3)
 
   /**
-   * Description
    * @param {Game} game
    */
   constructor(game) {
@@ -37,10 +33,6 @@ export class Banana {
     this.initialize()
   }
 
-  /**
-   * Description
-   * @param {CanvasRenderingContext2D} ctx
-   */
   draw() {
     if (this.blinkHandler.isHidden) return
 

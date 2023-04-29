@@ -1,6 +1,5 @@
-import { BananaPool } from './banana-pool.js'
-import { BananaState } from './banana.js'
 import { BlinkHandler } from './blink-handler.js'
+import { Game } from './game.js'
 import { InputHandler } from './input-handler.js'
 import { Key } from './key.js'
 
@@ -10,14 +9,10 @@ export class Player {
 
   sourceX = 0
   sourceY = 0
-  destinationX = 25
-  destinationY = 100
 
   frameIndex = 0
   framesLength = 8
   fps = 1000 / 12
-
-  state = PlayerState.normal
 
   blinkHandler = new BlinkHandler(300, 5)
 
@@ -25,38 +20,29 @@ export class Player {
   startShootTimeStamp = 0
 
   /**
-   * Description
-   * @param {number} canvasWidth
-   * @param {number} canvasHeight
-   * @param {BananaPool} bananaPool
-   * @param {() => void} decreaseLife
-   * @param {(timesStamp: number, playerX: number, playerY: number) => void} shoot
-   * @param {() => void} disableAllPeas
+   * @param {Game} game
    */
-  constructor(
-    canvasWidth,
-    canvasHeight,
-    bananaPool,
-    decreaseLife,
-    shoot,
-    disableAllPeas
-  ) {
+  constructor(game) {
+    this.ctx = game.ctx
+
     this.image = new Image()
     this.image.src = './assets/img/player-spritesheet.png'
 
-    this.canvasWidth = canvasWidth
-    this.canvasHeight = canvasHeight
+    this.canvasWidth = game.canvasWidth
+    this.canvasHeight = game.canvasHeight
 
     this.frameWidth = 94
     this.frameHeight = 72
     this.maxDestinationX = this.canvasWidth - this.frameWidth
     this.maxDestinationY = this.canvasHeight - this.frameHeight
 
-    this.bananaPool = bananaPool
+    this.bananaPool = game.bananaPool
 
-    this.decreaseLife = decreaseLife
-    this.shoot = shoot
-    this.disableAllPeas = disableAllPeas
+    this.decreaseLife = game.life.decrease
+    this.shoot = game.peaPool.shoot
+    this.disableAllPeas = game.peaPool.disableAllPeas
+
+    this.initialize()
   }
 
   /**
@@ -148,6 +134,12 @@ export class Player {
     }
 
     return false
+  }
+
+  initialize = () => {
+    this.destinationX = 25
+    this.destinationY = (this.canvasHeight - this.frameHeight) / 2
+    this.state = PlayerState.normal
   }
 }
 

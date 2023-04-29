@@ -1,4 +1,5 @@
 import { Backgrounds } from './backgrounds.js'
+import { BananaBoss } from './banana-boss/banana-boss.js'
 import { BananaPool } from './banana-pool.js'
 import { GlitchOverlay } from './glitch-overlay.js'
 import { InputHandler } from './input-handler.js'
@@ -38,18 +39,12 @@ export class Game {
     this.glitchOverlay = new GlitchOverlay(this.ctx, this.life)
 
     this.opener = new Opener(this)
+    this.bananaBoss = new BananaBoss(this)
 
     this.bananaPool = new BananaPool(this)
     this.peaPool = new PeaPool(this)
 
-    this.player = new Player(
-      this.canvas.width,
-      this.canvas.height,
-      this.bananaPool,
-      this.life.decrease,
-      this.peaPool.shoot,
-      this.peaPool.disableAllPeas
-    )
+    this.player = new Player(this)
 
     this.initializeBananaTimer()
 
@@ -62,8 +57,12 @@ export class Game {
    */
   animate = (timeStamp) => {
     if (this.inputHandler.keys.has(Key.Enter)) {
-      if (this.state === GameState.opener) this.state = GameState.level1
-      else this.isPaused = !this.isPaused
+      if (this.state === GameState.opener) {
+        this.state = GameState.introLevel1
+      } else if (this.state === GameState.introLevel1) {
+        this.state = GameState.level1
+      } else this.isPaused = !this.isPaused
+
       this.inputHandler.keys.delete(Key.Enter)
     }
 
@@ -74,6 +73,9 @@ export class Game {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
       this.backgrounds.animate(deltaTime)
+
+      if (this.state === GameState.introLevel1)
+        this.bananaBoss.render(timeStamp, deltaTime)
 
       if (this.state === GameState.level1) {
         this.bananaPool.render(timeStamp, deltaTime)
@@ -99,7 +101,8 @@ export class Game {
   }
 }
 const GameState = Object.freeze({
-  opener: 'opener',
-  level1: 'level1',
-  bossLevel1: 'bossLevel1',
+  opener: Symbol('opener'),
+  introLevel1: Symbol('introLevel1'),
+  level1: Symbol('level1'),
+  bossLevel1: Symbol('bossLevel1'),
 })
