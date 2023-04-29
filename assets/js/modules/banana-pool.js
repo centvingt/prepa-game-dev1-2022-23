@@ -10,25 +10,20 @@ export class BananaPool {
    */
   constructor(game) {
     this.game = game
+    this.timestamp = this.game.timestamp
     this.resetTimer()
   }
 
-  /**
-   * Animer les bananes présentes à l’écran
-   * @param {number} timeStamp
-   * @param {number} deltaTime
-   */
-  render(timeStamp, deltaTime) {
-    if (this.bananaTimer > this.nextBananaTime) {
+  render() {
+    if (this.bananaTimer >= this.nextBananaTime) {
       this.activateNewBanana()
       this.resetTimer()
     } else {
-      this.bananaTimer += deltaTime
+      this.bananaTimer += this.timestamp.delta
     }
 
     for (const banana of this.bananas.filter((b) => b.isActive)) {
-      banana.draw()
-      banana.update(timeStamp, deltaTime)
+      banana.render()
     }
   }
 
@@ -38,10 +33,6 @@ export class BananaPool {
   }
 
   activateNewBanana = () => {
-    // const index = this.bananas.findIndex((b) => !b.isActive)
-    // if (index === -1) this.bananas.push(new Banana(this.game))
-    // else this.bananas[index].initialize()
-
     const banana = this.bananas.find((b) => !b.isActive)
     if (banana) banana.initialize()
     else this.bananas.push(new Banana(this.game))

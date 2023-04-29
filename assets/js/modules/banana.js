@@ -2,46 +2,54 @@ import { BlinkHandler } from './blink-handler.js'
 import { Game } from './game.js'
 
 export class Banana {
-  sourceX = 0
-  sourceY = 0
+  frameX = 0
+  frameY = 0
 
   frameIndex = 0
   framesLength = 16
   fps = 1000 / 12
 
-  blinkHandler = new BlinkHandler(100, 3)
-
   /**
    * @param {Game} game
    */
   constructor(game) {
-    this.game = game
-    this.ctx = this.game.ctx
+    this.ctx = game.ctx
+    this.gameWidth = game.width
+    this.gameHeight = game.height
+    this.timestamp = game.timestamp
 
-    this.sourceWidth = 49
-    this.sourceHeight = 54
+    this.frameWidth = 49
+    this.frameHeight = 54
 
     const scaleFactor = Math.random() * 0.3 + 0.85
-    this.destinationWidth = this.sourceWidth * scaleFactor
-    this.destinationHeight = this.sourceHeight * scaleFactor
+    this.destinationWidth = this.frameWidth * scaleFactor
+    this.destinationHeight = this.frameHeight * scaleFactor
 
     this.image = new Image()
     this.image.src = './assets/img/banana-spritesheet.png'
 
-    this.increaseScore = this.game.score.increase
+    this.increaseScore = game.score.increase
+
+    this.isHidden = false
+    this.blinkHandler = new BlinkHandler(100, 3, this)
 
     this.initialize()
   }
 
+  render = () => {
+    this.draw()
+    this.update()
+  }
+
   draw() {
-    if (this.blinkHandler.isHidden) return
+    if (this.isHidden) return
 
     this.ctx.drawImage(
       this.image,
-      this.sourceX,
-      this.sourceY,
-      this.sourceWidth,
-      this.sourceHeight,
+      this.frameX,
+      this.frameY,
+      this.frameWidth,
+      this.frameHeight,
       this.destinationX,
       this.destinationY,
       this.destinationWidth,
@@ -49,21 +57,18 @@ export class Banana {
     )
   }
 
-  /**
-   * @param {number} timeStamp
-   * @param {number} deltaTime
-   */
-  update(timeStamp, deltaTime) {
-    this.frameIndex = Math.floor(timeStamp / this.fps) % this.framesLength
-    this.sourceX = this.frameIndex * this.sourceWidth
+  update() {
+    this.frameIndex =
+      Math.floor(this.timestamp.current / this.fps) % this.framesLength
+    this.frameX = this.frameIndex * this.frameWidth
 
-    this.destinationX -= (deltaTime * this.speed) / 1000
+    this.destinationX -= (this.timestamp.delta * this.speed) / 1000
 
     if (this.state === BananaState.killed) {
-      this.isActive = this.blinkHandler.checkCurrentBlink(timeStamp)
+      this.isActive = this.blinkHandler.checkCurrentBlink()
     }
 
-    this.sourceY = this.sourceHeight * this.state
+    this.frameY = this.frameHeight * this.state
 
     if (this.destinationX < -this.destinationWidth) {
       this.isActive = false
@@ -73,14 +78,21 @@ export class Banana {
   }
 
   initialize() {
-    this.destinationX = this.game.width
+    this.destinationX = this.gameWidth
     this.destinationY =
-      Math.random() * (this.game.height - this.destinationHeight)
+      Math.random() * (this.gameHeight - this.destinationHeight)
     this.speed = Math.random() * 50 + 100
 
     this.isActive = true
     this.state = BananaState.normal
   }
+
+  /**
+   * Masquer l’instance
+   * @param {boolean} boolean
+   * @returns {void}
+   */
+  hide = (boolean) => (this.isHidden = boolean)
 }
 
 export const BananaState = Object.freeze({

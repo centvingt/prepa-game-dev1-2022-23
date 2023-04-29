@@ -27,16 +27,25 @@ export class Game {
     /** @type {CanvasRenderingContext2D} */
     this.ctx = this.canvas.getContext('2d')
 
+    this.lastTimeStamp = 0
+    this.currentTimeStamp = 0
+    this.deltaTime = 0
+    this.timestamp = {
+      current: 0,
+      last: 0,
+      delta: 0,
+    }
+
     this.life = new Life()
 
     this.isPaused = false
     this.inputHandler = new InputHandler()
 
-    this.backgrounds = new Backgrounds(this.ctx)
+    this.backgrounds = new Backgrounds(this)
 
     this.score = new Score()
 
-    this.glitchOverlay = new GlitchOverlay(this.ctx, this.life)
+    this.glitchOverlay = new GlitchOverlay(this)
 
     this.opener = new Opener(this)
     this.bananaBoss = new BananaBoss(this)
@@ -48,14 +57,15 @@ export class Game {
 
     this.initializeBananaTimer()
 
-    this.lastTimeStamp = 0
-    this.animate(this.lastTimeStamp)
+    this.animate(0)
   }
 
   /**
    * @param  {number} timeStamp
    */
-  animate = (timeStamp) => {
+  animate = (timestamp) => {
+    this.timestamp.current = timestamp
+
     if (this.inputHandler.keys.has(Key.Enter)) {
       if (this.state === GameState.opener) {
         this.state = GameState.introLevel1
@@ -66,29 +76,27 @@ export class Game {
       this.inputHandler.keys.delete(Key.Enter)
     }
 
-    const deltaTime = timeStamp - this.lastTimeStamp
-    this.lastTimeStamp = timeStamp
+    this.timestamp.delta = this.timestamp.current - this.timestamp.last
+    this.timestamp.last = this.timestamp.current
 
     if (!this.isPaused) {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
-      this.backgrounds.animate(deltaTime)
+      this.backgrounds.render()
 
-      if (this.state === GameState.introLevel1)
-        this.bananaBoss.render(timeStamp, deltaTime)
+      if (this.state === GameState.introLevel1) this.bananaBoss.render()
 
       if (this.state === GameState.level1) {
-        this.bananaPool.render(timeStamp, deltaTime)
-        this.peaPool.render(timeStamp, deltaTime)
+        this.bananaPool.render()
+        this.peaPool.render()
 
-        this.player.draw(this.ctx)
-        this.player.update(timeStamp, this.inputHandler)
+        this.player.render()
       }
 
-      this.glitchOverlay.render(timeStamp)
+      this.glitchOverlay.render()
 
       if (this.state === GameState.opener) {
-        this.opener.render(timeStamp)
+        this.opener.render()
       }
     }
 

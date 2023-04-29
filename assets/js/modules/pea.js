@@ -13,24 +13,26 @@ export class Pea {
   /**
    * Description
    * @param {Game} game
-   * @param {number} playerX
-   * @param {number} playerY
    */
-  constructor(game, playerX, playerY) {
-    this.gameWidth = game.width
+  constructor(game) {
     this.ctx = game.ctx
+    this.player = game.player
+    this.timestamp = game.timestamp
+    this.gameWidth = game.width
+
     this.frameWidth = 48
     this.frameHeight = 16.5
     this.image = new Image()
     this.image.src = './assets/img/pea-spritesheet.png'
 
-    this.initialize(playerX, playerY)
+    this.initialize()
   }
 
-  /**
-   * Description
-   * @param {CanvasRenderingContext2D} ctx
-   */
+  render = () => {
+    this.draw()
+    this.update()
+  }
+
   draw() {
     this.ctx.drawImage(
       this.image,
@@ -45,23 +47,20 @@ export class Pea {
     )
   }
 
-  /**
-   * @param {number} timeStamp
-   * @param {number} deltaTime
-   */
-  update(timeStamp, deltaTime) {
-    this.frameIndex = Math.floor(timeStamp / this.fps) % this.framesLength
+  update() {
+    this.frameIndex =
+      Math.floor(this.timestamp.current / this.fps) % this.framesLength
 
     this.sourceX = this.frameIndex * this.frameWidth
 
-    this.destinationX += (deltaTime * this.speedX) / 1000
+    this.destinationX += (this.timestamp.delta * this.speedX) / 1000
 
     if (this.destinationX > this.gameWidth) this.isActive = false
   }
 
-  initialize(playerX, playerY) {
+  initialize() {
     this.isActive = true
-    this.destinationX = playerX + 40
-    this.destinationY = playerY + 24
+    this.destinationX = this.player.destinationX + 40
+    this.destinationY = this.player.destinationY + 24
   }
 }

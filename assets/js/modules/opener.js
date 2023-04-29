@@ -2,8 +2,6 @@ import { BlinkHandler } from './blink-handler.js'
 import { Game } from './game.js'
 
 export class Opener {
-  blinkHandler = new BlinkHandler(1000, Infinity)
-
   /**
    * @param {Game} game
    */
@@ -11,6 +9,10 @@ export class Opener {
     /** @type {CanvasRenderingContext2D} */ this.ctx = game.ctx
     const canvasWidth = game.canvas.width
     const canvasHeight = game.canvas.height
+
+    this.isHidden = false
+    this.timestamp = game.timestamp
+    this.blinkHandler = new BlinkHandler(1000, Infinity, this)
 
     this.image = new Image()
     this.image.src = './assets/img/title.png'
@@ -30,15 +32,15 @@ export class Opener {
     this.textLine2Y = this.textLine1Y + 24
   }
 
-  render = (timeStamp) => {
+  render = () => {
     this.draw()
-    this.update(timeStamp)
+    this.update()
   }
 
   draw = () => {
     this.ctx.drawImage(this.image, this.imageX, this.imageY)
 
-    if (this.blinkHandler.isHidden) {
+    if (this.isHidden) {
       this.ctx.font = '24px vcr'
       this.ctx.textAlign = 'center'
       this.ctx.fillStyle = 'white'
@@ -47,7 +49,14 @@ export class Opener {
     }
   }
 
-  update = (timesStamp) => {
-    this.blinkHandler.checkCurrentBlink(timesStamp)
+  update = () => {
+    this.blinkHandler.checkCurrentBlink()
   }
+
+  /**
+   * Masquer l’instance
+   * @param {boolean} boolean
+   * @returns {void}
+   */
+  hide = (boolean) => (this.isHidden = boolean)
 }

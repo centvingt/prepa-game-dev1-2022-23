@@ -1,6 +1,5 @@
 import { BlinkHandler } from './blink-handler.js'
 import { Game } from './game.js'
-import { InputHandler } from './input-handler.js'
 import { Key } from './key.js'
 
 export class Player {
@@ -14,8 +13,6 @@ export class Player {
   framesLength = 8
   fps = 1000 / 12
 
-  blinkHandler = new BlinkHandler(300, 5)
-
   shootStateDuration = 200
   startShootTimeStamp = 0
 
@@ -24,12 +21,14 @@ export class Player {
    */
   constructor(game) {
     this.ctx = game.ctx
+    this.timestamp = game.timestamp
+    this.inputKeys = game.inputHandler.keys
 
     this.image = new Image()
     this.image.src = './assets/img/player-spritesheet.png'
 
-    this.canvasWidth = game.canvasWidth
-    this.canvasHeight = game.canvasHeight
+    this.canvasWidth = game.canvas.width
+    this.canvasHeight = game.canvas.height
 
     this.frameWidth = 94
     this.frameHeight = 72
@@ -42,17 +41,21 @@ export class Player {
     this.shoot = game.peaPool.shoot
     this.disableAllPeas = game.peaPool.disableAllPeas
 
+    this.isHidden = false
+    this.blinkHandler = new BlinkHandler(300, 5, this)
+
     this.initialize()
   }
 
-  /**
-   * Description
-   * @param {CanvasRenderingContext2D} ctx
-   */
-  draw(ctx) {
-    if (this.blinkHandler.isHidden) return
+  render = () => {
+    this.draw()
+    this.update()
+  }
 
-    ctx.drawImage(
+  draw() {
+    if (this.isHidden) return
+
+    this.ctx.drawImage(
       this.image,
       this.sourceX,
       this.sourceY,
@@ -65,21 +68,17 @@ export class Player {
     )
   }
 
-  /**
-   * Description
-   * @param {number} timeStamp
-   * @param {InputHandler} inputHandler
-   */
-  update(timeStamp, inputHandler) {
-    this.frameIndex = Math.floor(timeStamp / this.fps) % this.framesLength
-    this.sourceX = this.frameIndex * this.frameWidth
+  update() {
+    this.frameIndex =
+      Math.floor(this.timestamp.current / this.fps) % this.framesLength
 
+    this.sourceX = this.frameIndex * this.frameWidth
     this.sourceY = this.frameHeight * this.state.description
 
-    if (inputHandler.keys.has(Key.ArrowDown)) this.destinationY += this.speed
-    if (inputHandler.keys.has(Key.ArrowUp)) this.destinationY -= this.speed
-    if (inputHandler.keys.has(Key.ArrowLeft)) this.destinationX -= this.speed
-    if (inputHandler.keys.has(Key.ArrowRight)) this.destinationX += this.speed
+    if (this.inputKeys.has(Key.ArrowDown)) this.destinationY += this.speed
+    if (this.inputKeys.has(Key.ArrowUp)) this.destinationY -= this.speed
+    if (this.inputKeys.has(Key.ArrowLeft)) this.destinationX -= this.speed
+    if (this.inputKeys.has(Key.ArrowRight)) this.destinationX += this.speed
 
     if (this.destinationX < 0) this.destinationX = 0
     if (this.destinationX > this.maxDestinationX)
@@ -88,15 +87,16 @@ export class Player {
     if (this.destinationY > this.maxDestinationY)
       this.destinationY = this.maxDestinationY
 
-    if (inputHandler.keys.has(Key.Space) && this.state === PlayerState.normal) {
+    if (this.inputKeys.has(Key.Space) && this.state === PlayerState.normal) {
       this.shoot(this.destinationX, this.destinationY)
       this.state = PlayerState.shoot
-      this.startShootTimeStamp = timeStamp
+      this.startShootTimeStamp = this.timestamp.current
     }
 
     if (
       this.state === PlayerState.shoot &&
-      timeStamp - this.startShootTimeStamp >= this.shootStateDuration
+      this.timestamp.current - this.startShootTimeStamp >=
+        this.shootStateDuration
     )
       this.state = PlayerState.normal
 
@@ -104,7 +104,7 @@ export class Player {
       this.state = PlayerState.collision
     if (
       this.state === PlayerState.collision &&
-      !this.blinkHandler.checkCurrentBlink(timeStamp)
+      !this.blinkHandler.checkCurrentBlink()
     )
       this.state = PlayerState.normal
   }
@@ -140,7 +140,18 @@ export class Player {
     this.destinationX = 25
     this.destinationY = (this.canvasHeight - this.frameHeight) / 2
     this.state = PlayerState.normal
+    console.log(
+      'assets/js/modules/player.js > this.destinationY >',
+      this.destinationY
+    )
   }
+
+  /**
+   * Masquer l’instance
+   * @param {boolean} boolean
+   * @returns {void}
+   */
+  hide = (boolean) => (this.isHidden = boolean)
 }
 
 const PlayerState = Object.freeze({

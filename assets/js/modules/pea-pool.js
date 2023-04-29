@@ -15,12 +15,7 @@ export class PeaPool {
     this.increaseScore = this.game.score.increase
   }
 
-  /**
-   * Animer les bananes présentes à l’écran
-   * @param {number} timeStamp
-   * @param {number} deltaTime
-   */
-  render(timeStamp, deltaTime) {
+  render() {
     for (const pea of this.peas.filter((p) => p.isActive)) {
       for (const banana of this.bananas) {
         if (
@@ -39,8 +34,7 @@ export class PeaPool {
         }
       }
 
-      pea.draw()
-      pea.update(timeStamp, deltaTime)
+      pea.render()
     }
   }
 
@@ -49,10 +43,10 @@ export class PeaPool {
    * @param {number} playerY
    * @returns {void}
    */
-  shoot = (playerX, playerY) => {
+  shoot = () => {
     const pea = this.peas.find((p) => !p.isActive)
-    if (pea) pea.initialize(playerX, playerY)
-    else this.peas.push(new Pea(this.game, playerX, playerY))
+    if (pea) pea.initialize()
+    else this.peas.push(new Pea(this.game))
   }
 
   disableAllPeas = () => {

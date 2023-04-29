@@ -1,22 +1,21 @@
-import { Life } from './life.js'
+import { Game } from './game.js'
 
 export class GlitchOverlay {
   /**
-   * @param {CanvasRenderingContext2D} ctx
-   * @param {Life} life
+   * @param {Game} game
    */
-  constructor(ctx, life) {
-    this.glitchLife1 = new Glitch(ctx, 1, 202)
-    this.glitchLife2 = new Glitch(ctx, 2, 80)
-    this.glitchLife3 = new Glitch(ctx, 3, 322)
+  constructor(game) {
+    this.glitchLife1 = new Glitch(game, 1, 202)
+    this.glitchLife2 = new Glitch(game, 2, 80)
+    this.glitchLife3 = new Glitch(game, 3, 322)
 
-    this.life = life
+    this.life = game.life
   }
 
-  render = (timesStamp) => {
-    this.glitchLife3.render(timesStamp)
-    if (this.life.value < 3) this.glitchLife2.render(timesStamp)
-    if (this.life.value < 2) this.glitchLife1.render(timesStamp)
+  render = () => {
+    this.glitchLife3.render()
+    if (this.life.value < 3) this.glitchLife2.render()
+    if (this.life.value < 2) this.glitchLife1.render()
   }
 }
 
@@ -30,21 +29,22 @@ class Glitch {
 
   /**
    *
-   * @param {CanvasRenderingContext2D} ctx
+   * @param {Game} game
    * @param {numberOfLifes} number
    * @param {framesLength} number
    */
-  constructor(ctx, numberOfLifes, framesLength) {
+  constructor(game, numberOfLifes, framesLength) {
     this.image = new Image()
     this.image.src = `./assets/img/glitch-life-${numberOfLifes}.png`
 
-    this.ctx = ctx
+    this.ctx = game.ctx
+    this.currentTimeStamp = game.currentTimeStamp
     this.framesLength = framesLength
   }
 
-  render = (timesStamp) => {
+  render = () => {
     this.draw()
-    this.update(timesStamp)
+    this.update()
   }
 
   draw = () => {
@@ -61,8 +61,9 @@ class Glitch {
     )
   }
 
-  update = (timeStamp) => {
-    this.frameIndex = Math.floor(timeStamp / this.fps) % this.framesLength
+  update = () => {
+    this.frameIndex =
+      Math.floor(this.currentTimeStamp / this.fps) % this.framesLength
 
     const xIndex = this.frameIndex % 10
     const yIndex = Math.floor(this.frameIndex / 10)

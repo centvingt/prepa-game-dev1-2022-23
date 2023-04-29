@@ -1,3 +1,5 @@
+import { Game } from './game.js'
+
 export class Background {
   destinationX = 0
   destinationY = 0
@@ -7,17 +9,20 @@ export class Background {
 
   /**
    *
-   * @param {CanvasRenderingContext2D} ctx
+   * @param {Game} game
    */
-  constructor(ctx) {
-    this.ctx = ctx
+  constructor(game) {
+    this.ctx = game.ctx
+    this.timestamp = game.timestamp
     this.image = new Image()
     this.image.src = './assets/img/background-all-930x360.jpg'
   }
 
-  /**
-   * @param  {CanvasRenderingContext2D} ctx
-   */
+  render = () => {
+    this.draw()
+    this.update()
+  }
+
   draw() {
     this.ctx.drawImage(
       this.image,
@@ -43,11 +48,8 @@ export class Background {
     )
   }
 
-  /**
-   * @param  {number} deltaTime
-   */
-  update(deltaTime) {
-    this.destinationX -= (deltaTime * this.speed) / 1000
+  update() {
+    this.destinationX -= (this.timestamp.delta * this.speed) / 1000
     if (this.destinationX <= 0 - this.width) this.destinationX = 0
   }
 }

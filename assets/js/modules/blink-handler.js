@@ -1,31 +1,31 @@
 export class BlinkHandler {
   /**
-   *
    * @param {number} blinkDuration
    * @param {number} maxBlink
+   * @param {{hide: (boolean: boolean) => void}, timestamp: {current: number, last: number, delta: number}} instance
    */
-  constructor(blinkDuration, maxBlink) {
+  constructor(blinkDuration, maxBlink, instance) {
     this.blinkDuration = blinkDuration
     this.maxBlink = maxBlink
+    this.hide = instance.hide
+    this.timestamp = instance.timestamp
 
     this.reset()
   }
 
-  /**
-   * @param {number} timeStamp
-   */
-  checkCurrentBlink = (timeStamp) => {
-    if (this.lastBlinkTimestamp === 0) this.lastBlinkTimestamp = timeStamp
+  checkCurrentBlink = () => {
+    if (this.lastBlinkTimestamp === 0)
+      this.lastBlinkTimestamp = this.timestamp.current
 
-    this.elapsedBlinkTime += timeStamp - this.lastBlinkTimestamp
+    this.elapsedBlinkTime += this.timestamp.current - this.lastBlinkTimestamp
 
     const collisionBlink = Math.floor(
       this.elapsedBlinkTime / this.blinkDuration
     )
 
-    this.isHidden = collisionBlink % 2 === 0
+    this.hide(collisionBlink % 2 === 0)
 
-    this.lastBlinkTimestamp = timeStamp
+    this.lastBlinkTimestamp = this.timestamp.current
 
     if (collisionBlink >= this.maxBlink) {
       this.reset()
@@ -38,6 +38,6 @@ export class BlinkHandler {
   reset = () => {
     this.lastBlinkTimestamp = 0
     this.elapsedBlinkTime = 0
-    this.isHidden = false
+    this.instanceIsHidden = false
   }
 }

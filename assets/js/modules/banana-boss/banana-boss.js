@@ -1,4 +1,5 @@
 import { BlinkHandler } from '../blink-handler.js'
+import { Game } from '../game.js'
 
 export class BananaBoss {
   frameX = 0
@@ -9,17 +10,16 @@ export class BananaBoss {
   fps = 1000 / 12
   speed = 50
 
-  blinkHandler = new BlinkHandler(100, 3)
-
   /**
    * @param {Game} game
    */
   constructor(game) {
-    this.game = game
-    this.ctx = this.game.ctx
+    this.ctx = game.ctx
 
-    this.gameWidth = this.game.width
-    this.gameHeight = this.game.height
+    this.timestamp = game.timestamp
+
+    this.gameWidth = game.width
+    this.gameHeight = game.height
 
     this.frameWidth = 204
     this.frameHeight = 148
@@ -30,18 +30,21 @@ export class BananaBoss {
     this.image = new Image()
     this.image.src = './assets/img/banana-boss-spritesheet.png'
 
-    this.increaseScore = this.game.score.increase
+    this.increaseScore = game.score.increase
+
+    this.isHidden = false
+    this.blinkHandler = new BlinkHandler(100, 3, this)
 
     this.initialize()
   }
 
-  render = (timeStamp, deltaTime) => {
+  render = () => {
     this.draw()
-    this.update(timeStamp, deltaTime)
+    this.update()
   }
 
   draw() {
-    if (this.blinkHandler.isHidden) return
+    if (this.isHidden) return
 
     this.ctx.drawImage(
       this.image,
@@ -59,16 +62,17 @@ export class BananaBoss {
   /**
    * @param {number} timeStamp
    */
-  update(timeStamp, deltaTime) {
-    this.frameIndex = Math.floor(timeStamp / this.fps) % this.framesLength
+  update() {
+    this.frameIndex =
+      Math.floor(this.timestamp.current / this.fps) % this.framesLength
     this.frameX = this.frameIndex * this.frameWidth
 
     if (this.destinationX > this.finalDestinationX)
-      this.destinationX -= (deltaTime * this.speed) / 1000
+      this.destinationX -= (this.timestamp.delta * this.speed) / 1000
     else this.destinationX === this.finalDestinationX
 
     if (this.state === BananaBossState.touched) {
-      this.isActive = this.blinkHandler.checkCurrentBlink(timeStamp)
+      this.isActive = this.blinkHandler.checkCurrentBlink()
     }
 
     this.frameY = this.frameHeight * this.state
@@ -79,6 +83,13 @@ export class BananaBoss {
 
     this.state = BananaBossState.normal
   }
+
+  /**
+   * Masquer l’instance
+   * @param {boolean} boolean
+   * @returns {void}
+   */
+  hide = (boolean) => (this.isHidden = boolean)
 }
 
 export const BananaBossState = Object.freeze({
