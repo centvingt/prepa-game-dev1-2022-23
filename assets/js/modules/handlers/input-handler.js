@@ -1,11 +1,18 @@
-import { Key } from './key.js'
-
 const upBtn = document.querySelector('.cross-controller__up')
 const rightBtn = document.querySelector('.cross-controller__right')
 const downBtn = document.querySelector('.cross-controller__down')
 const leftBtn = document.querySelector('.cross-controller__left')
 const aBtn = document.querySelector('.a-btn')
 const bBtn = document.querySelector('.b-btn')
+
+export const Key = Object.freeze({
+  ArrowDown: 'ArrowDown',
+  ArrowUp: 'ArrowUp',
+  ArrowLeft: 'ArrowLeft',
+  ArrowRight: 'ArrowRight',
+  Space: 'Space',
+  Enter: 'Enter',
+})
 
 export class InputHandler {
   constructor() {

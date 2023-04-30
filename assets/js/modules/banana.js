@@ -1,4 +1,4 @@
-import { BlinkHandler } from './blink-handler.js'
+import { BlinkHandler } from './handlers/blink-handler.js'
 import { Game } from './game.js'
 
 export class Banana {

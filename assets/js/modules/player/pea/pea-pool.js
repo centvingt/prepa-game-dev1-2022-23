@@ -1,6 +1,6 @@
 import { Pea } from './pea.js'
-import { Game } from './game.js'
-import { BananaState } from './banana.js'
+import { Game } from '../../game.js'
+import { BananaState } from '../../banana.js'
 
 export class PeaPool {
   /** @type {Pea[]} */

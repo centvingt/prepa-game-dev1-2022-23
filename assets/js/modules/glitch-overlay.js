@@ -38,7 +38,7 @@ class Glitch {
     this.image.src = `./assets/img/glitch-life-${numberOfLifes}.png`
 
     this.ctx = game.ctx
-    this.currentTimeStamp = game.currentTimeStamp
+    this.timestamp = game.timestamp
     this.framesLength = framesLength
   }
 
@@ -63,7 +63,7 @@ class Glitch {
 
   update = () => {
     this.frameIndex =
-      Math.floor(this.currentTimeStamp / this.fps) % this.framesLength
+      Math.floor(this.timestamp.current / this.fps) % this.framesLength
 
     const xIndex = this.frameIndex % 10
     const yIndex = Math.floor(this.frameIndex / 10)

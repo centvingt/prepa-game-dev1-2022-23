@@ -1,5 +1,5 @@
-import { BlinkHandler } from '../blink-handler.js'
-import { Game } from '../game.js'
+import { BlinkHandler } from './handlers/blink-handler.js'
+import { Game } from './game.js'
 
 export class BananaBoss {
   frameX = 0

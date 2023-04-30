@@ -1,13 +1,12 @@
-import { Backgrounds } from './backgrounds.js'
-import { BananaBoss } from './banana-boss/banana-boss.js'
+import { Backgrounds } from './background/backgrounds.js'
+import { BananaBoss } from './banana-boss.js'
 import { BananaPool } from './banana-pool.js'
 import { GlitchOverlay } from './glitch-overlay.js'
-import { InputHandler } from './input-handler.js'
-import { Key } from './key.js'
+import { InputHandler, Key } from './handlers/input-handler.js'
 import { Life } from './life.js'
 import { Opener } from './opener.js'
-import { PeaPool } from './pea-pool.js'
-import { Player } from './player.js'
+import { PeaPool } from './player/pea/pea-pool.js'
+import { Player } from './player/player.js'
 import { Score } from './score.js'
 
 export class Game {
@@ -23,6 +22,8 @@ export class Game {
     this.canvas = document.querySelector('canvas')
     this.canvas.width = this.width = 480
     this.canvas.height = this.height = 360
+
+    this.canvasBorderLength = 8
 
     /** @type {CanvasRenderingContext2D} */
     this.ctx = this.canvas.getContext('2d')
@@ -108,7 +109,7 @@ export class Game {
     this.nextBananaTime = Math.random() * 50 + 500
   }
 }
-const GameState = Object.freeze({
+export const GameState = Object.freeze({
   opener: Symbol('opener'),
   introLevel1: Symbol('introLevel1'),
   level1: Symbol('level1'),

@@ -5,7 +5,6 @@ self.addEventListener('install', (event) => {
     try {
       const cache = awaitcaches.open(cacheName)
       await cache.addAll([
-        '/sw.js',
         '/index.html',
         '/manifest.webmanifest',
         '/assets/css/reset.css',
