@@ -6,6 +6,8 @@ import { PlayerShoot } from './player-shoot.js'
 import { PlayerCollision } from './player-collision.js'
 
 export class Player {
+  image = document.querySelector('img.player-spritesheet')
+
   ammunitionLoading = true
   speed = 3
 
@@ -24,9 +26,6 @@ export class Player {
     this.ctx = game.ctx
     this.timestamp = game.timestamp
     this.inputKeys = game.inputHandler.keys
-
-    this.image = new Image()
-    this.image.src = './assets/img/player-spritesheet.png'
 
     this.canvasWidth = game.canvas.width
     this.canvasHeight = game.canvas.height

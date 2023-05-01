@@ -1,6 +1,8 @@
 import { Game } from '../../game.js'
 
 export class Pea {
+  image = document.querySelector('img.pea-spritesheet')
+
   sourceX = 0
   sourceY = 0
 
@@ -22,8 +24,6 @@ export class Pea {
 
     this.frameWidth = 48
     this.frameHeight = 16.5
-    this.image = new Image()
-    this.image.src = './assets/img/pea-spritesheet.png'
 
     this.initialize()
   }

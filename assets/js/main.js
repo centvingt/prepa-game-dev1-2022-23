@@ -11,7 +11,10 @@ if (!deviceIsMobile) {
   for (const ui of mobileUi) ui.style.display = 'none'
   document.querySelector('.game').classList.add('desktop')
 }
-new Game(deviceIsMobile)
+document.addEventListener('DOMContentLoaded', () => {
+  new Game(deviceIsMobile)
+  document.querySelector('.game').style.display = 'grid'
+})
 
 // if (navigator.serviceWorker) {
 //   navigator.serviceWorker

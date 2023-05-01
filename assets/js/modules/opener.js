@@ -2,6 +2,8 @@ import { BlinkHandler } from './handlers/blink-handler.js'
 import { Game } from './game.js'
 
 export class Opener {
+  image = document.querySelector('img.title')
+
   /**
    * @param {Game} game
    */
@@ -14,8 +16,6 @@ export class Opener {
     this.timestamp = game.timestamp
     this.blinkHandler = new BlinkHandler(1000, Infinity, this)
 
-    this.image = new Image()
-    this.image.src = './assets/img/title.png'
     const imageWidth = 372
     const imageHeight = 196
 
