@@ -6,25 +6,19 @@ export class Backgrounds {
    * @param {Game} game
    */
   constructor(game) {
-    const skyBackground = new Background(game)
-    skyBackground.image.src = './assets/img/background-sky-930x360.jpg'
+    const skyBackground = new Background(game, '.background-sky')
     skyBackground.speed *= 0.2
 
-    const horizonBackground = new Background(game)
-    horizonBackground.image.src = './assets/img/background-horizon-930x360.png'
+    const horizonBackground = new Background(game, '.background-horizon')
     horizonBackground.speed *= 0.4
 
-    const buildingsBackground = new Background(game)
-    buildingsBackground.image.src =
-      './assets/img/background-buildings-930x360.png'
+    const buildingsBackground = new Background(game, '.background-buildings')
     buildingsBackground.speed *= 0.6
 
-    const cloudsBackground = new Background(game)
-    cloudsBackground.image.src = './assets/img/background-clouds-930x360.png'
+    const cloudsBackground = new Background(game, '.background-clouds')
     cloudsBackground.speed *= 0.8
 
-    const treesBackground = new Background(game)
-    treesBackground.image.src = './assets/img/background-trees-930x360.png'
+    const treesBackground = new Background(game, '.background-trees')
     treesBackground.speed *= 1
 
     this.array = [

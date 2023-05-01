@@ -10,12 +10,12 @@ export class Background {
   /**
    *
    * @param {Game} game
+   * @param {string} imageSelector
    */
-  constructor(game) {
+  constructor(game, imageSelector) {
     this.ctx = game.ctx
     this.timestamp = game.timestamp
-    this.image = new Image()
-    this.image.src = './assets/img/background-all-930x360.jpg'
+    this.image = document.querySelector(imageSelector)
   }
 
   render = () => {

@@ -1,8 +1,8 @@
 import { Key } from '../handlers/input-handler.js'
 import { PlayerShoot } from './player-shoot.js'
-import { Player, PlayerState } from './player.js'
+import { Player } from './player.js'
 
-export class PlayerMovementPatternControllable {
+export class PlayerMovementFullControllable {
   /**
    * @param {Player} player
    */

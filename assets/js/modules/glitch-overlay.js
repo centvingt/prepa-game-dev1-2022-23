@@ -34,8 +34,7 @@ class Glitch {
    * @param {framesLength} number
    */
   constructor(game, numberOfLifes, framesLength) {
-    this.image = new Image()
-    this.image.src = `./assets/img/glitch-life-${numberOfLifes}.png`
+    this.image = document.querySelector(`.glitch-life-${numberOfLifes}`)
 
     this.ctx = game.ctx
     this.timestamp = game.timestamp

@@ -2,6 +2,8 @@ import { BlinkHandler } from './handlers/blink-handler.js'
 import { Game } from './game.js'
 
 export class Banana {
+  image = document.querySelector('.banana-spritesheet')
+
   frameX = 0
   frameY = 0
 
@@ -24,9 +26,6 @@ export class Banana {
     const scaleFactor = Math.random() * 0.3 + 0.85
     this.destinationWidth = this.frameWidth * scaleFactor
     this.destinationHeight = this.frameHeight * scaleFactor
-
-    this.image = new Image()
-    this.image.src = './assets/img/banana-spritesheet.png'
 
     this.increaseScore = game.score.increase
 

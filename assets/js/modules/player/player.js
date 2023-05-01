@@ -1,9 +1,10 @@
 import { BlinkHandler } from '../handlers/blink-handler.js'
 import { Game, GameState } from '../game.js'
-import { PlayerMovementPatternControllable } from './player-movement-pattern-controllable.js'
+import { PlayerMovementFullControllable } from './player-movement-full-fcontrollable.js'
 import { PlayerBounds } from './player-bounds.js'
 import { PlayerShoot } from './player-shoot.js'
 import { PlayerCollision } from './player-collision.js'
+import { PlayerMovementAutoVertical } from './player-movement-auto-vertical.js'
 
 export class Player {
   image = document.querySelector('img.player-spritesheet')
@@ -38,6 +39,9 @@ export class Player {
     this.maxDestinationY =
       this.canvasHeight - this.frameHeight - this.canvasBorderLength
 
+    this.initialDestinationX = 25
+    this.initialDestinationY = (this.canvasHeight - this.frameHeight) / 2
+
     this.bananaPool = game.bananaPool
 
     this.decreaseLife = game.life.decrease
@@ -53,9 +57,8 @@ export class Player {
     this.shoot = new PlayerShoot(this)
     this.collision = new PlayerCollision(this)
 
-    this.movementPatternControllable = new PlayerMovementPatternControllable(
-      this
-    )
+    this.movementFullControllable = new PlayerMovementFullControllable(this)
+    this.movementAutoVertical = new PlayerMovementAutoVertical(this)
   }
 
   render = () => {
@@ -86,13 +89,16 @@ export class Player {
     this.sourceX = this.frameIndex * this.frameWidth
     this.sourceY = this.frameHeight * this.state.description
 
+    if (this.game.state === GameState.introLevel1)
+      this.movementAutoVertical.update()
+
     if (this.game.state === GameState.level1)
-      this.movementPatternControllable.update()
+      this.movementFullControllable.update()
   }
 
   initialize = () => {
-    this.destinationX = 25
-    this.destinationY = (this.canvasHeight - this.frameHeight) / 2
+    this.destinationX = this.initialDestinationX
+    this.destinationY = this.initialDestinationY
     this.state = PlayerState.normal
   }
 

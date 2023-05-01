@@ -85,7 +85,10 @@ export class Game {
 
       this.backgrounds.render()
 
-      if (this.state === GameState.introLevel1) this.bananaBoss.render()
+      if (this.state === GameState.introLevel1) {
+        this.player.render()
+        this.bananaBoss.render()
+      }
 
       if (this.state === GameState.level1) {
         this.bananaPool.render()
