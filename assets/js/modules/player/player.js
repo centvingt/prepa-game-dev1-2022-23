@@ -1,6 +1,6 @@
 import { BlinkHandler } from '../handlers/blink-handler.js'
 import { Game, GameState } from '../game.js'
-import { PlayerMovementFullControllable } from './player-movement-full-fcontrollable.js'
+import { PlayerMovementFullControllable } from './player-movement-full-controllable.js'
 import { PlayerBounds } from './player-bounds.js'
 import { PlayerShoot } from './player-shoot.js'
 import { PlayerCollision } from './player-collision.js'

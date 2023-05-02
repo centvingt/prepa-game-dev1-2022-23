@@ -1,5 +1,7 @@
-import { BlinkHandler } from './handlers/blink-handler.js'
-import { Game } from './game.js'
+import { BlinkHandler } from '../handlers/blink-handler.js'
+import { Game, GameState } from '../game.js'
+import { BananaMovementHorizontalLinear } from './banana-movement-Horizontal-linear.js'
+import { BananaMovementCircularAroundBoss } from './banana-movement-circular-around-boss.js'
 
 export class Banana {
   image = document.querySelector('.banana-spritesheet')
@@ -15,6 +17,7 @@ export class Banana {
    * @param {Game} game
    */
   constructor(game) {
+    this.game = game
     this.ctx = game.ctx
     this.gameWidth = game.width
     this.gameHeight = game.height
@@ -23,14 +26,17 @@ export class Banana {
     this.frameWidth = 49
     this.frameHeight = 54
 
-    const scaleFactor = Math.random() * 0.3 + 0.85
+    // const scaleFactor = Math.random() * 0.3 + 0.85
+    const scaleFactor = 1
     this.destinationWidth = this.frameWidth * scaleFactor
     this.destinationHeight = this.frameHeight * scaleFactor
 
     this.increaseScore = game.score.increase
 
-    this.isHidden = false
     this.blinkHandler = new BlinkHandler(100, 3, this)
+
+    this.movementHorizontalLinear = new BananaMovementHorizontalLinear(this)
+    this.movementCircularAroundBoss = new BananaMovementCircularAroundBoss(this)
 
     this.initialize()
   }
@@ -61,29 +67,33 @@ export class Banana {
       Math.floor(this.timestamp.current / this.fps) % this.framesLength
     this.frameX = this.frameIndex * this.frameWidth
 
-    this.destinationX -= (this.timestamp.delta * this.speed) / 1000
-
-    if (this.state === BananaState.killed) {
-      this.isActive = this.blinkHandler.checkCurrentBlink()
-    }
-
-    this.frameY = this.frameHeight * this.state
-
-    if (this.destinationX < -this.destinationWidth) {
-      this.isActive = false
-      this.increaseScore(-2)
-      this.blinkHandler.reset()
+    switch (this.game.state) {
+      case GameState.introLevel1:
+        this.movementCircularAroundBoss.update()
+        break
+      case GameState.level1:
+        this.movementHorizontalLinear.update()
+        break
+      default:
+        break
     }
   }
 
   initialize() {
-    this.destinationX = this.gameWidth
-    this.destinationY =
-      Math.random() * (this.gameHeight - this.destinationHeight)
-    this.speed = Math.random() * 50 + 100
+    switch (this.game.state) {
+      case GameState.introLevel1:
+        this.movementCircularAroundBoss.initialize()
+        break
+      case GameState.level1:
+        this.movementHorizontalLinear.initialize()
+        break
+      default:
+        break
+    }
 
     this.isActive = true
     this.state = BananaState.normal
+    this.isHidden = false
   }
 
   /**

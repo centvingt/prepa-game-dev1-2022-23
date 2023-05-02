@@ -68,7 +68,7 @@ export class BananaBoss {
 
     if (this.destinationX > this.finalDestinationX)
       this.destinationX -= (this.timestamp.delta * this.speed) / 1000
-    else this.destinationX === this.finalDestinationX
+    else this.destinationX = this.finalDestinationX
 
     if (this.state === BananaBossState.touched) {
       this.isActive = this.blinkHandler.checkCurrentBlink()

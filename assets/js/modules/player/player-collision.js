@@ -1,3 +1,4 @@
+import { BananaState } from '../banana/banana.js'
 import { Player, PlayerState } from './player.js'
 
 export class PlayerCollision {
@@ -22,9 +23,10 @@ export class PlayerCollision {
    * @returns {boolean}
    */
   collisionIsDetected = () => {
-    for (const banana of this.player.bananaPool.bananas) {
+    for (const banana of this.player.bananaPool.bananas.filter(
+      (b) => b.isActive
+    )) {
       if (
-        !banana.isActive ||
         this.player.destinationX >
           banana.destinationX + banana.destinationWidth - 10 ||
         this.player.destinationX + this.player.frameWidth - 10 <
@@ -35,12 +37,10 @@ export class PlayerCollision {
           banana.destinationY
       )
         continue
-      else {
-        banana.isActive = false
-        this.player.disableAllPeas()
-        this.player.decreaseLife()
-        return true
-      }
+      banana.isActive = false
+      this.player.disableAllPeas()
+      this.player.decreaseLife()
+      return true
     }
 
     return false

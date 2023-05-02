@@ -1,6 +1,6 @@
 import { Backgrounds } from './background/backgrounds.js'
 import { BananaBoss } from './banana-boss.js'
-import { BananaPool } from './banana-pool.js'
+import { BananaPool } from './banana/banana-pool.js'
 import { GlitchOverlay } from './glitch-overlay.js'
 import { InputHandler, Key } from './handlers/input-handler.js'
 import { Life } from './life.js'
@@ -70,7 +70,9 @@ export class Game {
     if (this.inputHandler.keys.has(Key.Enter)) {
       if (this.state === GameState.opener) {
         this.state = GameState.introLevel1
+        this.bananaPool.resetTimer()
       } else if (this.state === GameState.introLevel1) {
+        this.bananaPool.disableAllBananas()
         this.state = GameState.level1
       } else this.isPaused = !this.isPaused
 
@@ -88,6 +90,7 @@ export class Game {
       if (this.state === GameState.introLevel1) {
         this.player.render()
         this.bananaBoss.render()
+        this.bananaPool.render()
       }
 
       if (this.state === GameState.level1) {
