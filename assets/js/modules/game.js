@@ -70,7 +70,7 @@ export class Game {
     if (this.inputHandler.keys.has(Key.Enter)) {
       if (this.state === GameState.opener) {
         this.state = GameState.introLevel1
-        this.bananaPool.resetTimer()
+        for (let i = 0; i < 12; i++) this.bananaPool.activateNewBanana()
       } else if (this.state === GameState.introLevel1) {
         this.bananaPool.disableAllBananas()
         this.state = GameState.level1
