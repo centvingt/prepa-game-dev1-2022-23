@@ -29,7 +29,7 @@ export class BananaBoss {
     this.finalDestinationX = this.gameWidth - this.frameWidth - 50
     this.destinationY = (this.gameHeight - this.frameHeight) / 2
 
-    this.increaseScore = game.score.increase
+    this.increaseScore = game.level.increaseValueBy
 
     this.isHidden = false
     this.blinkHandler = new BlinkHandler(100, 3, this)

@@ -1,5 +1,14 @@
+import { Game, GameState } from '../game.js'
+import { HudDisplayHandler } from '../handlers/hud-display-handler.js'
+
 export class Life {
-  constructor() {
+  /** @type {GameState} */
+  #_gameState
+
+  /**
+   * @param {Game} game
+   */
+  constructor(game) {
     this.value = 3
 
     /** @type {HTMLDivElement} */
@@ -11,8 +20,23 @@ export class Life {
     /** @type {HTMLImageElement} */ this.img =
       document.querySelector('.life>img')
 
+    this.hudDisplayHandler = new HudDisplayHandler(this.ui)
+
+    this.gameState = game.state
     this.setUi()
   }
+
+  /**
+   * @param {GameState} newValue
+   */
+  set gameState(newValue) {
+    this.hudDisplayHandler.setDisplay(newValue)
+    this.#_gameState = newValue
+  }
+  get gameState() {
+    return this.#_gameState
+  }
+
   decrease = () => {
     this.value--
     if (this.value < 1) this.value = 0

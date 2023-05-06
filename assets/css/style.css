@@ -11,6 +11,7 @@
     --light-blue-color: #61ddff;
     --light-yellow-color: #f5f490;
     --light-green-color: #5dd37b;
+    --opacity-transition: opacity cubic-bezier(0.075, 0.82, 0.165, 1) 1s;
 }
 * {
     -webkit-tap-highlight-color: transparent;
@@ -218,6 +219,11 @@ canvas,
 }
 .b-btn {
     place-self: end end;
+}
+
+.level,
+.life {
+    transition: var(--opacity-transition);
 }
 
 .level {

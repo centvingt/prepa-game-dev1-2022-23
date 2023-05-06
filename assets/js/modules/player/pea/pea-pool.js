@@ -12,7 +12,7 @@ export class PeaPool {
   constructor(game) {
     this.game = game
     this.bananas = this.game.bananaPool.bananas
-    this.increaseScore = this.game.score.increase
+    this.increaseScore = this.game.level.increaseValueBy
   }
 
   render() {

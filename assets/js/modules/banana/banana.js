@@ -31,7 +31,7 @@ export class Banana {
     this.destinationWidth = this.frameWidth * scaleFactor
     this.destinationHeight = this.frameHeight * scaleFactor
 
-    this.increaseScore = game.score.increase
+    this.increaseScore = game.level.increaseValueBy
 
     this.blinkHandler = new BlinkHandler(100, 3, this)
 

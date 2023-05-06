@@ -3,14 +3,14 @@ import { BananaBoss } from './banana-boss.js'
 import { BananaPool } from './banana/banana-pool.js'
 import { GlitchOverlay } from './glitch-overlay.js'
 import { InputHandler, Key } from './handlers/input-handler.js'
-import { Life } from './life.js'
 import { Opener } from './opener.js'
 import { PeaPool } from './player/pea/pea-pool.js'
 import { Player } from './player/player.js'
-import { Score } from './score.js'
+import { Life } from './hud/life.js'
+import { Level } from './hud/level.js'
 
 export class Game {
-  state = GameState.opener
+  #_state = GameState.opener
 
   /**
    * @param {boolean} deviceIsMobile
@@ -37,14 +37,13 @@ export class Game {
       delta: 0,
     }
 
-    this.life = new Life()
+    this.life = new Life(this)
+    this.level = new Level(this)
 
     this.isPaused = false
     this.inputHandler = new InputHandler()
 
     this.backgrounds = new Backgrounds(this)
-
-    this.score = new Score()
 
     this.glitchOverlay = new GlitchOverlay(this)
 
@@ -59,6 +58,17 @@ export class Game {
     this.initializeBananaTimer()
 
     this.animate(0)
+
+    this.state = GameState.opener
+  }
+
+  set state(newValue) {
+    this.level.gameState = newValue
+    this.life.gameState = newValue
+    this.#_state = newValue
+  }
+  get state() {
+    return this.#_state
   }
 
   /**
@@ -73,6 +83,7 @@ export class Game {
         for (let i = 0; i < 12; i++) this.bananaPool.activateNewBanana()
       } else if (this.state === GameState.introLevel1) {
         this.bananaPool.disableAllBananas()
+        this.bananaPool.resetTimer()
         this.state = GameState.level1
       } else this.isPaused = !this.isPaused
 
@@ -87,24 +98,23 @@ export class Game {
 
       this.backgrounds.render()
 
-      if (this.state === GameState.introLevel1) {
+      if (
+        this.state === GameState.introLevel1 ||
+        this.state === GameState.level1 ||
+        this.state === GameState.bossLevel1
+      ) {
         this.player.render()
         this.bananaBoss.render()
         this.bananaPool.render()
       }
 
       if (this.state === GameState.level1) {
-        this.bananaPool.render()
         this.peaPool.render()
-
-        this.player.render()
       }
 
       this.glitchOverlay.render()
 
-      if (this.state === GameState.opener) {
-        this.opener.render()
-      }
+      if (this.state === GameState.opener) this.opener.render()
     }
 
     window.requestAnimationFrame(this.animate)
