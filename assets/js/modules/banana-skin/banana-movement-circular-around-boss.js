@@ -70,8 +70,13 @@ export class BananaMovementCircularAroundBoss {
     this.banana.destinationY =
       this.radius * Math.cos((angle * Math.PI) / 180) + this.centerY
 
-    if (this.banana.index === 0)
+    if (this.banana.index === 0 && this.bananaPool.angle < 360)
       this.bananaPool.angle +=
         (this.timestamp.delta * this.angleSpeed) / this.cadence
+    if (this.bananaPool.angle > 360)
+      this.bananaPool.angle +=
+        (this.timestamp.delta * this.angleSpeed) /
+        this.cadence /
+        this.bananaPool.circularBananas.length
   }
 }

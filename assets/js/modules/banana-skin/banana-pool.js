@@ -32,7 +32,7 @@ export class BananaPool {
   set gameState(newValue) {
     switch (newValue) {
       case GameState.introLevel1:
-        // case GameState.bossLevel1:
+      case GameState.bossLevel1:
         this.angle = 90
         this.circularBananas = []
         for (let i = 0; i < 12; i++)
