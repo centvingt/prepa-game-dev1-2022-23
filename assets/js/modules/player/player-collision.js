@@ -1,4 +1,4 @@
-import { BananaState } from '../banana/banana.js'
+import { BananaState } from '../banana-skin/banana.js'
 import { Player, PlayerState } from './player.js'
 
 export class PlayerCollision {

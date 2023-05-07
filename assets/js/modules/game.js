@@ -1,10 +1,9 @@
 import { Backgrounds } from './background/backgrounds.js'
 import { BananaBoss } from './banana-boss.js'
-import { BananaPool } from './banana/banana-pool.js'
+import { BananaPool } from './banana-skin/banana-pool.js'
 import { GlitchOverlay } from './glitch-overlay.js'
 import { InputHandler, Key } from './handlers/input-handler.js'
 import { Opener } from './opener.js'
-import { PeaPool } from './player/pea/pea-pool.js'
 import { Player } from './player/player.js'
 import { Life } from './hud/life.js'
 import { Level } from './hud/level.js'
@@ -51,7 +50,6 @@ export class Game {
     this.bananaBoss = new BananaBoss(this)
 
     this.bananaPool = new BananaPool(this)
-    this.peaPool = new PeaPool(this)
 
     this.player = new Player(this)
 
@@ -65,6 +63,8 @@ export class Game {
   set state(newValue) {
     this.level.gameState = newValue
     this.life.gameState = newValue
+    this.bananaPool.gameState = newValue
+    this.bananaBoss.gameState = newValue
     this.#_state = newValue
   }
   get state() {
@@ -80,7 +80,6 @@ export class Game {
     if (this.inputHandler.keys.has(Key.Enter)) {
       if (this.state === GameState.opener) {
         this.state = GameState.introLevel1
-        for (let i = 0; i < 12; i++) this.bananaPool.activateNewBanana()
       } else if (this.state === GameState.introLevel1) {
         this.bananaPool.disableAllBananas()
         this.bananaPool.resetTimer()
@@ -100,16 +99,17 @@ export class Game {
 
       if (
         this.state === GameState.introLevel1 ||
+        this.state === GameState.bossLevel1
+      )
+        this.bananaBoss.render()
+
+      if (
+        this.state === GameState.introLevel1 ||
         this.state === GameState.level1 ||
         this.state === GameState.bossLevel1
       ) {
         this.player.render()
-        this.bananaBoss.render()
         this.bananaPool.render()
-      }
-
-      if (this.state === GameState.level1) {
-        this.peaPool.render()
       }
 
       this.glitchOverlay.render()

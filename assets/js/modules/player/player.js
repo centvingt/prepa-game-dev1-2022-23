@@ -1,10 +1,12 @@
 import { BlinkHandler } from '../handlers/blink-handler.js'
 import { Game, GameState } from '../game.js'
-import { PlayerMovementFullControllable } from './player-movement-full-controllable.js'
+import { PlayerMovementFullControllable } from './movement/player-movement-full-controllable.js'
+import { PlayerMovementVerticalAuto } from './movement/player-movement-vertical-auto.js'
+import { PlayerMovementVerticalControllable } from './movement/player-movement-vertical-controllable.js'
 import { PlayerBounds } from './player-bounds.js'
 import { PlayerShoot } from './player-shoot.js'
 import { PlayerCollision } from './player-collision.js'
-import { PlayerMovementAutoVertical } from './player-movement-auto-vertical.js'
+import { PeaPool } from './pea/pea-pool.js'
 
 export class Player {
   image = document.querySelector('img.player-spritesheet')
@@ -45,8 +47,8 @@ export class Player {
     this.bananaPool = game.bananaPool
 
     this.decreaseLife = game.life.decrease
-    this.peaPool = game.peaPool
-    this.disableAllPeas = game.peaPool.disableAllPeas
+    this.peaPool = new PeaPool(this)
+    this.disableAllPeas = this.peaPool.disableAllPeas
 
     this.isHidden = false
     this.blinkHandler = new BlinkHandler(300, 5, this)
@@ -58,10 +60,21 @@ export class Player {
     this.collision = new PlayerCollision(this)
 
     this.movementFullControllable = new PlayerMovementFullControllable(this)
-    this.movementAutoVertical = new PlayerMovementAutoVertical(this)
+    this.movementVerticalAuto = new PlayerMovementVerticalAuto(this)
+    this.movementVerticalControllable = new PlayerMovementVerticalControllable(
+      this
+    )
   }
 
   render = () => {
+    switch (this.game.state) {
+      case GameState.bossLevel1:
+      case GameState.level1:
+        this.peaPool.render()
+        break
+      default:
+        break
+    }
     this.draw()
     this.update()
   }
@@ -90,10 +103,13 @@ export class Player {
     this.sourceY = this.frameHeight * this.state.description
 
     if (this.game.state === GameState.introLevel1)
-      this.movementAutoVertical.update()
+      this.movementVerticalAuto.update()
 
     if (this.game.state === GameState.level1)
       this.movementFullControllable.update()
+
+    if (this.game.state === GameState.bossLevel1)
+      this.movementVerticalControllable.update()
   }
 
   initialize = () => {

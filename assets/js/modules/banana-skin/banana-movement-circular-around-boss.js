@@ -2,8 +2,6 @@ import { Banana } from './banana.js'
 
 export class BananaMovementCircularAroundBoss {
   static angle = 0
-  static instancesCounter = 0
-  index = 0
   angleSpeed = 360 / 12
   cadence = 1000
 
@@ -12,13 +10,20 @@ export class BananaMovementCircularAroundBoss {
    */
   constructor(banana) {
     this.banana = banana
+    this.index = banana.index
 
     const game = banana.game
+
+    this.game = game
+
+    this.bananaPool = this.game.bananaPool
+    /** @type {Banana[]} */ this.circularBananas =
+      game.bananaPool.circularBananas
+
     this.gameWidth = game.canvas.width
     this.gameHeight = game.canvas.height
     this.bananaBoss = game.bananaBoss
     this.timestamp = game.timestamp
-    this.bananas = game.bananaPool.bananas
 
     this.radius = this.bananaBoss.frameWidth / 2 + 20
 
@@ -28,6 +33,13 @@ export class BananaMovementCircularAroundBoss {
       this.bananaBoss.destinationY + this.bananaBoss.frameHeight / 2 - 20
 
     this.startDestinationX = this.centerX + this.radius
+
+    this.start = false
+
+    this.banana.destinationX = this.gameWidth
+    this.banana.destinationY = (this.gameHeight - this.banana.frameHeight) / 2
+
+    this.banana.speed = this.gameWidth - this.startDestinationX
   }
 
   update() {
@@ -35,10 +47,9 @@ export class BananaMovementCircularAroundBoss {
       if (this.bananaBoss.destinationX !== this.bananaBoss.finalDestinationX)
         return
 
-      const activeBananas = this.bananas.filter((b) => b.isActive)
       if (
         this.index !== 0 &&
-        !activeBananas[this.index - 1].movementCircularAroundBoss.start
+        !this.circularBananas[this.index - 1].movement.start
       )
         return
 
@@ -53,29 +64,14 @@ export class BananaMovementCircularAroundBoss {
       return
     }
 
-    const angle =
-      BananaMovementCircularAroundBoss.angle - this.angleSpeed * this.index
+    const angle = this.bananaPool.angle - this.angleSpeed * this.index
     this.banana.destinationX =
       this.radius * Math.sin((angle * Math.PI) / 180) + this.centerX
     this.banana.destinationY =
       this.radius * Math.cos((angle * Math.PI) / 180) + this.centerY
 
-    if (this.index === 0)
-      BananaMovementCircularAroundBoss.angle +=
+    if (this.banana.index === 0)
+      this.bananaPool.angle +=
         (this.timestamp.delta * this.angleSpeed) / this.cadence
-  }
-
-  initialize() {
-    this.start = false
-
-    this.banana.destinationX = this.gameWidth
-    this.banana.destinationY = (this.gameHeight - this.banana.frameHeight) / 2
-
-    // 60px à parcourir en 1s pour rejoindre le cercle
-    this.banana.speed = 60
-
-    if (BananaMovementCircularAroundBoss.instancesCounter === 0)
-      BananaMovementCircularAroundBoss.angle = 90
-    this.index = BananaMovementCircularAroundBoss.instancesCounter++
   }
 }

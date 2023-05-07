@@ -1,6 +1,6 @@
-import { Player } from './player.js'
+import { Player } from '../player.js'
 
-export class PlayerMovementAutoVertical {
+export class PlayerMovementVerticalAuto {
   speedFactor = 1
 
   /**
@@ -15,6 +15,8 @@ export class PlayerMovementAutoVertical {
   }
 
   update() {
+    this.player.destinationX = this.player.initialDestinationX
+
     this.player.destinationY += this.player.speed * 0.75 * this.speedFactor
 
     if (this.player.destinationY <= this.player.initialDestinationX) {

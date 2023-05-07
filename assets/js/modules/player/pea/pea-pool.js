@@ -1,22 +1,27 @@
 import { Pea } from './pea.js'
-import { Game } from '../../game.js'
-import { BananaState } from '../../banana/banana.js'
+import { BananaState } from '../../banana-skin/banana.js'
+import { Player } from '../player.js'
 
 export class PeaPool {
   /** @type {Pea[]} */
   peas = []
 
   /**
-   * @param {Game} game
+   * @param {Player} player
    */
-  constructor(game) {
-    this.game = game
-    this.bananas = this.game.bananaPool.bananas
+  constructor(player) {
+    this.game = player.game
+    this.bananas = player.bananaPool.bananas
     this.increaseScore = this.game.level.increaseValueBy
   }
 
   render() {
     for (const pea of this.peas.filter((p) => p.isActive)) {
+      console.log(
+        'assets/js/modules/player/pea/pea-pool.js > this.bananas >',
+        this.bananas.filter((b) => b.isActive)
+      )
+
       for (const banana of this.bananas) {
         if (
           !banana.isActive ||

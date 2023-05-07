@@ -1,7 +1,5 @@
 import { BlinkHandler } from '../handlers/blink-handler.js'
 import { Game, GameState } from '../game.js'
-import { BananaMovementHorizontalLinear } from './banana-movement-Horizontal-linear.js'
-import { BananaMovementCircularAroundBoss } from './banana-movement-circular-around-boss.js'
 
 export class Banana {
   image = document.querySelector('.banana-spritesheet')
@@ -15,8 +13,10 @@ export class Banana {
 
   /**
    * @param {Game} game
+   * @param {{update: () => void}} movement
+   * @param {number} index
    */
-  constructor(game) {
+  constructor(game, movement, index) {
     this.game = game
     this.ctx = game.ctx
     this.gameWidth = game.width
@@ -35,10 +35,7 @@ export class Banana {
 
     this.blinkHandler = new BlinkHandler(100, 3, this)
 
-    this.movementHorizontalLinear = new BananaMovementHorizontalLinear(this)
-    this.movementCircularAroundBoss = new BananaMovementCircularAroundBoss(this)
-
-    this.initialize()
+    this.initialize(movement, index)
   }
 
   render = () => {
@@ -67,29 +64,23 @@ export class Banana {
       Math.floor(this.timestamp.current / this.fps) % this.framesLength
     this.frameX = this.frameIndex * this.frameWidth
 
-    switch (this.game.state) {
-      case GameState.introLevel1:
-        this.movementCircularAroundBoss.update()
-        break
-      case GameState.level1:
-        this.movementHorizontalLinear.update()
-        break
-      default:
-        break
+    this.movement.update()
+
+    if (this.state === BananaState.killed)
+      this.isActive = this.blinkHandler.checkCurrentBlink()
+
+    this.frameY = this.frameHeight * this.state
+
+    if (this.destinationX < -this.destinationWidth) {
+      this.isActive = false
+      this.increaseScore(-2)
     }
   }
 
-  initialize() {
-    switch (this.game.state) {
-      case GameState.introLevel1:
-        this.movementCircularAroundBoss.initialize()
-        break
-      case GameState.level1:
-        this.movementHorizontalLinear.initialize()
-        break
-      default:
-        break
-    }
+  initialize(movement, index) {
+    this.index = index
+    /** @type {{update: () => void, start: boolean || undefined}} */ this.movement =
+      new movement(this)
 
     this.isActive = true
     this.state = BananaState.normal

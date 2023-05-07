@@ -1,7 +1,10 @@
 import { BlinkHandler } from './handlers/blink-handler.js'
-import { Game } from './game.js'
+import { Game, GameState } from './game.js'
 
 export class BananaBoss {
+  /** @type {GameState} */
+  #_gameState
+
   image = document.querySelector('.banana-boss-spritesheet')
 
   frameX = 0
@@ -17,6 +20,7 @@ export class BananaBoss {
    */
   constructor(game) {
     this.ctx = game.ctx
+    this.gameState = game.state
 
     this.timestamp = game.timestamp
 
@@ -35,6 +39,24 @@ export class BananaBoss {
     this.blinkHandler = new BlinkHandler(100, 3, this)
 
     this.initialize()
+  }
+
+  /**
+   * @param {GameState} newValue
+   */
+  set gameState(newValue) {
+    switch (newValue) {
+      case GameState.introLevel1:
+      case GameState.bossLevel1:
+        this.initialize()
+        break
+      default:
+        break
+    }
+    this.#_gameState = newValue
+  }
+  get gameState() {
+    return this.#_gameState
   }
 
   render = () => {
