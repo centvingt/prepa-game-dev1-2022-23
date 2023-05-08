@@ -17,11 +17,6 @@ export class PeaPool {
 
   render() {
     for (const pea of this.peas.filter((p) => p.isActive)) {
-      console.log(
-        'assets/js/modules/player/pea/pea-pool.js > this.bananas >',
-        this.bananas.filter((b) => b.isActive)
-      )
-
       for (const banana of this.bananas) {
         if (
           !banana.isActive ||
