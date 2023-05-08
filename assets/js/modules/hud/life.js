@@ -22,6 +22,7 @@ export class Life {
 
     this.hudDisplayHandler = new HudDisplayHandler(this.ui)
 
+    this.game = game
     this.gameState = game.state
     this.setUi()
   }
@@ -31,6 +32,8 @@ export class Life {
    */
   set gameState(newValue) {
     this.hudDisplayHandler.setDisplay(newValue)
+    if (newValue === GameState.opening) this.value = 3
+    this.setUi()
     this.#_gameState = newValue
   }
   get gameState() {
@@ -39,7 +42,10 @@ export class Life {
 
   decrease = () => {
     this.value--
-    if (this.value < 1) this.value = 0
+    if (this.value < 1) {
+      this.value = 0
+      this.game.state = GameState.lost
+    }
 
     this.setUi()
     this.ui.style.opacity = 0

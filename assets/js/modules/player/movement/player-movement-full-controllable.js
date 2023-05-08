@@ -1,5 +1,4 @@
 import { Key } from '../../handlers/input-handler.js'
-import { PlayerShoot } from '../player-shoot.js'
 import { Player } from '../player.js'
 
 export class PlayerMovementFullControllable {
@@ -8,7 +7,6 @@ export class PlayerMovementFullControllable {
    */
   constructor(player) {
     this.player = player
-    this.shoot = new PlayerShoot(player)
   }
   update() {
     if (this.player.inputKeys.has(Key.ArrowDown))

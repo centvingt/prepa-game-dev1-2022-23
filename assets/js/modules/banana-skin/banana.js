@@ -73,7 +73,7 @@ export class Banana {
 
     if (this.destinationX < -this.destinationWidth) {
       this.isActive = false
-      this.increaseScore(-2)
+      if (this.game.state === GameState.level1) this.increaseScore(-2)
     }
   }
 

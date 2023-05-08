@@ -1,5 +1,5 @@
-import { Key } from '../handlers/input-handler.js'
-import { Player, PlayerState } from './player.js'
+import { Key } from '../../handlers/input-handler.js'
+import { Player, PlayerState } from '../player.js'
 
 export class PlayerShoot {
   shootStateDuration = 200

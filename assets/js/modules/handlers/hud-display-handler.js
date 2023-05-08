@@ -11,7 +11,7 @@ export class HudDisplayHandler {
    */
   setDisplay(gameState) {
     switch (gameState) {
-      case GameState.opener:
+      case GameState.opening:
       case GameState.introLevel1:
         this.ui.style.opacity = 0
         break

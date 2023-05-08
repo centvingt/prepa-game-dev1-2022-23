@@ -36,7 +36,7 @@ export class BananaBoss {
     this.increaseScore = game.level.increaseValueBy
 
     this.isHidden = false
-    this.blinkHandler = new BlinkHandler(100, 3, this)
+    this.blinkHandler = new BlinkHandler(100, 5, this)
 
     this.initialize()
   }
@@ -92,8 +92,12 @@ export class BananaBoss {
       this.destinationX -= (this.timestamp.delta * this.speed) / 1000
     else this.destinationX = this.finalDestinationX
 
-    if (this.state === BananaBossState.touched) {
-      this.isActive = this.blinkHandler.checkCurrentBlink()
+    if (
+      this.state === BananaBossState.touched &&
+      !this.blinkHandler.checkCurrentBlink()
+    ) {
+      this.state = BananaBossState.normal
+      this.increaseScore(1)
     }
 
     this.frameY = this.frameHeight * this.state
@@ -101,7 +105,6 @@ export class BananaBoss {
 
   initialize() {
     this.destinationX = this.gameWidth
-
     this.state = BananaBossState.normal
   }
 

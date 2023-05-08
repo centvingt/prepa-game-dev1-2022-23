@@ -1,6 +1,8 @@
 import { Pea } from './pea.js'
 import { BananaState } from '../../banana-skin/banana.js'
 import { Player } from '../player.js'
+import { GameState } from '../../game.js'
+import { BananaBossState } from '../../banana-boss.js'
 
 export class PeaPool {
   /** @type {Pea[]} */
@@ -12,6 +14,7 @@ export class PeaPool {
   constructor(player) {
     this.game = player.game
     this.bananas = player.bananaPool.bananas
+    this.bananaBoss = this.game.bananaBoss
     this.increaseScore = this.game.level.increaseValueBy
   }
 
@@ -26,11 +29,29 @@ export class PeaPool {
           pea.destinationY > banana.destinationY + banana.destinationHeight ||
           pea.destinationY + pea.frameHeight < banana.destinationY
         ) {
-          continue
+          if (this.game.state === GameState.bossLevel1) {
+            if (
+              pea.destinationX >
+                this.bananaBoss.destinationX +
+                  this.bananaBoss.destinationWidth ||
+              pea.destinationX + pea.frameWidth - 20 <
+                this.bananaBoss.destinationX ||
+              pea.destinationY >
+                this.bananaBoss.destinationY +
+                  this.bananaBoss.destinationHeight ||
+              pea.destinationY + pea.frameHeight < this.bananaBoss.destinationY
+            )
+              continue
+            else {
+              pea.isActive = false
+              if (this.bananaBoss.state === BananaBossState.normal)
+                this.bananaBoss.state = BananaBossState.touched
+            }
+          }
         } else {
           pea.isActive = false
           banana.state = BananaState.killed
-          this.increaseScore(1)
+          if (this.game.state === GameState.level1) this.increaseScore(1)
         }
       }
 

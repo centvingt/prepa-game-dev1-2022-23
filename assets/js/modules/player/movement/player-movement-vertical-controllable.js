@@ -1,6 +1,5 @@
 import { GameState } from '../../game.js'
 import { Key } from '../../handlers/input-handler.js'
-import { PlayerShoot } from '../player-shoot.js'
 import { Player } from '../player.js'
 
 export class PlayerMovementVerticalControllable {
@@ -9,7 +8,6 @@ export class PlayerMovementVerticalControllable {
    */
   constructor(player) {
     this.player = player
-    this.shoot = new PlayerShoot(player)
   }
 
   update() {
@@ -21,11 +19,13 @@ export class PlayerMovementVerticalControllable {
       this.player.destinationY -= this.player.speed
 
     this.player.bounds.update()
+
     if (
-      !this.player.game.state === GameState.bossLevel1 ||
+      this.player.game.state === GameState.bossLevel1 &&
       this.player.game.bananaPool.angle > 360
     )
       this.player.shoot.update()
+
     this.player.collision.update()
   }
 }

@@ -3,13 +3,15 @@ import { BananaBoss } from './banana-boss.js'
 import { BananaPool } from './banana-skin/banana-pool.js'
 import { GlitchOverlay } from './glitch-overlay.js'
 import { InputHandler, Key } from './handlers/input-handler.js'
-import { Opener } from './opener.js'
+import { OpeningScreen } from './screens/opening-screen.js'
 import { Player } from './player/player.js'
 import { Life } from './hud/life.js'
 import { Level } from './hud/level.js'
+import { WinScreen } from './screens/win-screen.js'
+import { LostScreen } from './screens/lost-screen.js'
 
 export class Game {
-  #_state = GameState.opener
+  #_state = GameState.opening
 
   /**
    * @param {boolean} deviceIsMobile
@@ -46,7 +48,10 @@ export class Game {
 
     this.glitchOverlay = new GlitchOverlay(this)
 
-    this.opener = new Opener(this)
+    this.openingScreen = new OpeningScreen(this)
+    this.winScreen = new WinScreen(this)
+    this.lostScreen = new LostScreen(this)
+
     this.bananaBoss = new BananaBoss(this)
 
     this.bananaPool = new BananaPool(this)
@@ -57,7 +62,7 @@ export class Game {
 
     this.animate(0)
 
-    this.state = GameState.opener
+    this.state = GameState.opening
   }
 
   set state(newValue) {
@@ -78,13 +83,24 @@ export class Game {
     this.timestamp.current = timestamp
 
     if (this.inputHandler.keys.has(Key.Enter)) {
-      if (this.state === GameState.opener) {
-        this.state = GameState.introLevel1
-      } else if (this.state === GameState.introLevel1) {
-        this.bananaPool.disableAllBananas()
-        this.bananaPool.resetTimer()
-        this.state = GameState.level1
-      } else this.isPaused = !this.isPaused
+      switch (this.state) {
+        case GameState.opening:
+          this.state = GameState.introLevel1
+          break
+        case GameState.introLevel1:
+          this.bananaPool.disableAllBananas()
+          this.bananaPool.resetTimer()
+          this.state = GameState.level1
+          break
+        case GameState.win:
+        case GameState.lost:
+          this.bananaPool.disableAllBananas()
+          this.state = GameState.opening
+          break
+        default:
+          this.isPaused = !this.isPaused
+          break
+      }
 
       this.inputHandler.keys.delete(Key.Enter)
     }
@@ -96,6 +112,9 @@ export class Game {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
       this.backgrounds.render()
+
+      if (this.state === GameState.win) this.winScreen.render()
+      if (this.state === GameState.lost) this.lostScreen.render()
 
       if (
         this.state === GameState.introLevel1 ||
@@ -114,7 +133,7 @@ export class Game {
 
       this.glitchOverlay.render()
 
-      if (this.state === GameState.opener) this.opener.render()
+      if (this.state === GameState.opening) this.openingScreen.render()
     }
 
     window.requestAnimationFrame(this.animate)
@@ -126,8 +145,10 @@ export class Game {
   }
 }
 export const GameState = Object.freeze({
-  opener: Symbol('opener'),
+  opening: Symbol('opening'),
   introLevel1: Symbol('introLevel1'),
   level1: Symbol('level1'),
   bossLevel1: Symbol('bossLevel1'),
+  win: Symbol('win'),
+  lost: Symbol('lost'),
 })

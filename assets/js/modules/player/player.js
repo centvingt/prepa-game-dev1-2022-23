@@ -3,9 +3,9 @@ import { Game, GameState } from '../game.js'
 import { PlayerMovementFullControllable } from './movement/player-movement-full-controllable.js'
 import { PlayerMovementVerticalAuto } from './movement/player-movement-vertical-auto.js'
 import { PlayerMovementVerticalControllable } from './movement/player-movement-vertical-controllable.js'
-import { PlayerBounds } from './player-bounds.js'
-import { PlayerShoot } from './player-shoot.js'
-import { PlayerCollision } from './player-collision.js'
+import { PlayerBounds } from './player-handlers/player-bounds.js'
+import { PlayerShoot } from './player-handlers/player-shoot.js'
+import { PlayerCollision } from './player-handlers/player-collision.js'
 import { PeaPool } from './pea/pea-pool.js'
 
 export class Player {
@@ -68,8 +68,8 @@ export class Player {
 
   render = () => {
     switch (this.game.state) {
-      case GameState.bossLevel1:
       case GameState.level1:
+      case GameState.bossLevel1:
         this.peaPool.render()
         break
       default:

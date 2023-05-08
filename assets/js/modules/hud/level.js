@@ -38,12 +38,17 @@ export class Level {
    * @param {number} newValue
    */
   set value(newValue) {
+    console.log('assets/js/modules/hud/level.js > newValue >', newValue)
+
     if (newValue < 0) newValue = 0
     this.rangeInput.value = newValue
     if (newValue >= this.maxValue) {
       switch (this.game.state) {
         case GameState.level1:
           this.game.state = GameState.bossLevel1
+          break
+        case GameState.bossLevel1:
+          this.game.state = GameState.win
           break
         default:
           break
@@ -62,13 +67,13 @@ export class Level {
     switch (newValue) {
       case GameState.level1:
         this.value = 0
-        this.maxValue = 3
+        this.maxValue = 20
         this.fromLabel.innerText = 'NIV 0'
         this.toLabel.innerText = 'NIV 1'
         break
       case GameState.bossLevel1:
         this.value = 0
-        this.maxValue = 3
+        this.maxValue = 10
         this.fromLabel.innerText = 'NIV 1'
         this.toLabel.innerText = 'BOSS'
         break

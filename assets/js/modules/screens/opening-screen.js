@@ -1,7 +1,7 @@
-import { BlinkHandler } from './handlers/blink-handler.js'
-import { Game, GameState } from './game.js'
+import { BlinkHandler } from '../handlers/blink-handler.js'
+import { Game, GameState } from '../game.js'
 
-export class Opener {
+export class OpeningScreen {
   image = document.querySelector('img.title')
 
   /**
