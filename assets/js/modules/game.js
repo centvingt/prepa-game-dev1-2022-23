@@ -9,6 +9,7 @@ import { Life } from './hud/life.js'
 import { Level } from './hud/level.js'
 import { WinScreen } from './screens/win-screen.js'
 import { LostScreen } from './screens/lost-screen.js'
+import { CannedPeasPool } from './canned-peas/canned-peas-pool.js'
 
 export class Game {
   #_state = GameState.opening
@@ -55,6 +56,8 @@ export class Game {
     this.bananaBoss = new BananaBoss(this)
 
     this.bananaPool = new BananaPool(this)
+
+    this.cannedPeasPool = new CannedPeasPool(this)
 
     this.player = new Player(this)
 
@@ -113,6 +116,7 @@ export class Game {
 
       this.backgrounds.render()
 
+      if (this.state === GameState.opening) this.openingScreen.render()
       if (this.state === GameState.win) this.winScreen.render()
       if (this.state === GameState.lost) this.lostScreen.render()
 
@@ -131,9 +135,9 @@ export class Game {
         this.bananaPool.render()
       }
 
-      this.glitchOverlay.render()
+      if (this.state === GameState.level1) this.cannedPeasPool.render()
 
-      if (this.state === GameState.opening) this.openingScreen.render()
+      this.glitchOverlay.render()
     }
 
     window.requestAnimationFrame(this.animate)

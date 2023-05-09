@@ -53,6 +53,7 @@ export class BananaPool {
   render() {
     switch (this.game.state) {
       case GameState.level1:
+      case GameState.bossLevel1:
         if (this.timer >= this.nextBananaTime) {
           this.activateNewBanana(BananaMovementHorizontalLinear)
           this.resetTimer()

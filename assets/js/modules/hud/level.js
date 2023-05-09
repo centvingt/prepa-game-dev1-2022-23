@@ -38,8 +38,6 @@ export class Level {
    * @param {number} newValue
    */
   set value(newValue) {
-    console.log('assets/js/modules/hud/level.js > newValue >', newValue)
-
     if (newValue < 0) newValue = 0
     this.rangeInput.value = newValue
     if (newValue >= this.maxValue) {

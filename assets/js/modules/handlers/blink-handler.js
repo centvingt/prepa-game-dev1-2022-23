@@ -19,15 +19,13 @@ export class BlinkHandler {
 
     this.elapsedBlinkTime += this.timestamp.current - this.lastBlinkTimestamp
 
-    const collisionBlink = Math.floor(
-      this.elapsedBlinkTime / this.blinkDuration
-    )
+    const blink = Math.floor(this.elapsedBlinkTime / this.blinkDuration)
 
-    this.hide(collisionBlink % 2 === 0)
+    this.hide(blink % 2 === 0)
 
     this.lastBlinkTimestamp = this.timestamp.current
 
-    if (collisionBlink >= this.maxBlink) {
+    if (blink >= this.maxBlink) {
       this.reset()
       return false
     }
