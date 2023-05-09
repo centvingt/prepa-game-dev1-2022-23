@@ -7,6 +7,7 @@ import { OpeningScreen } from './screens/opening-screen.js'
 import { Player } from './player/player.js'
 import { Life } from './hud/life.js'
 import { Level } from './hud/level.js'
+import { Ammunition } from './hud/ammunition.js'
 import { WinScreen } from './screens/win-screen.js'
 import { LostScreen } from './screens/lost-screen.js'
 import { CannedPeasPool } from './canned-peas/canned-peas-pool.js'
@@ -44,6 +45,7 @@ export class Game {
 
     this.isPaused = false
     this.inputHandler = new InputHandler()
+    this.ammunition = new Ammunition(this)
 
     this.backgrounds = new Backgrounds(this)
 
@@ -71,6 +73,7 @@ export class Game {
   set state(newValue) {
     this.level.gameState = newValue
     this.life.gameState = newValue
+    this.ammunition.gameState = newValue
     this.bananaPool.gameState = newValue
     this.bananaBoss.gameState = newValue
     this.#_state = newValue

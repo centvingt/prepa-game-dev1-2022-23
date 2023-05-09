@@ -1,5 +1,5 @@
 import { CannedPeas } from './canned-peas.js'
-import { Game, GameState } from '../game.js'
+import { Game } from '../game.js'
 
 export class CannedPeasPool {
   /**
@@ -12,7 +12,6 @@ export class CannedPeasPool {
     this.game = game
     this.timestamp = this.game.timestamp
 
-    this.timer = 0
     this.resetTimer()
   }
 
@@ -39,6 +38,24 @@ export class CannedPeasPool {
     else {
       cannedPeas = new CannedPeas(this.game)
       this.cannedPeasArray.push(cannedPeas)
+    }
+
+    const player = this.game.player
+
+    if (
+      cannedPeas.destinationX >
+        player.destinationX + player.destinationWidth - 10 ||
+      cannedPeas.destinationX + cannedPeas.frameWidth - 10 <
+        player.destinationX ||
+      cannedPeas.destinationY >
+        player.destinationY + player.destinationHeight - 10 ||
+      cannedPeas.destinationY + cannedPeas.frameHeight - 10 <
+        player.destinationY
+    )
+      return
+    else {
+      cannedPeas.isActive = false
+      this.activateNewCannedPeas()
     }
   }
 

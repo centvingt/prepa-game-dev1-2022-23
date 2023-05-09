@@ -222,7 +222,8 @@ canvas,
 }
 
 .level,
-.life {
+.life,
+.ammunition {
     transition: var(--opacity-transition);
 }
 

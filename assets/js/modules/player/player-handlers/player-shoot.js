@@ -10,17 +10,20 @@ export class PlayerShoot {
    */
   constructor(player) {
     this.player = player
+    this.ammunition = player.game.ammunition
   }
 
   update() {
     if (
       this.player.inputKeys.has(Key.Space) &&
-      this.player.state === PlayerState.normal
+      this.player.state === PlayerState.normal &&
+      this.ammunition.value > 0
     ) {
       this.player.peaPool.shoot(
         this.player.destinationX,
         this.player.destinationY
       )
+      this.ammunition.decreaseValueBy1()
       this.player.state = PlayerState.shoot
       this.startShootTimeStamp = this.player.timestamp.current
     }

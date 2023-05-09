@@ -11,8 +11,7 @@ import { PeaPool } from './pea/pea-pool.js'
 export class Player {
   image = document.querySelector('img.player-spritesheet')
 
-  ammunitionLoading = true
-  speed = 3
+  speed = 5
 
   sourceX = 0
   sourceY = 0
@@ -20,6 +19,9 @@ export class Player {
   frameIndex = 0
   framesLength = 8
   fps = 1000 / 12
+
+  peaLoadingDuration = 1000
+  peaLoadingTimer = 0
 
   /**
    * @param {Game} game
@@ -49,6 +51,8 @@ export class Player {
     this.decreaseLife = game.life.decrease
     this.peaPool = new PeaPool(this)
     this.disableAllPeas = this.peaPool.disableAllPeas
+
+    this.ammunition = game.ammunition
 
     this.isHidden = false
     this.blinkHandler = new BlinkHandler(300, 5, this)
@@ -102,6 +106,14 @@ export class Player {
     this.sourceX = this.frameIndex * this.frameWidth
     this.sourceY = this.frameHeight * this.state.description
 
+    if (this.state === PlayerState.peaLoading) {
+      this.peaLoadingTimer += this.timestamp.delta
+      if (this.peaLoadingTimer >= this.peaLoadingDuration) {
+        this.state = PlayerState.normal
+        this.peaLoadingDuration = 0
+      }
+    }
+
     if (this.game.state === GameState.introLevel1)
       this.movementVerticalAuto.update()
 
@@ -118,6 +130,12 @@ export class Player {
     this.state = PlayerState.normal
   }
 
+  loadsAmmunition = () => {
+    this.peaLoadingTimer = 0
+    this.state = PlayerState.peaLoading
+    this.ammunition.increaseValueBy10()
+  }
+
   /**
    * Masquer l’instance
    * @param {boolean} boolean
@@ -130,5 +148,5 @@ export const PlayerState = Object.freeze({
   normal: Symbol(0),
   shoot: Symbol(1),
   collision: Symbol(2),
-  peaLoad: Symbol(3),
+  peaLoading: Symbol(3),
 })

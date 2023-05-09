@@ -1,4 +1,4 @@
-import { BananaState } from '../../banana-skin/banana.js'
+import { CannedPeasState } from '../../canned-peas/canned-peas.js'
 import { Player, PlayerState } from '../player.js'
 
 export class PlayerCollision {
@@ -7,6 +7,7 @@ export class PlayerCollision {
    */
   constructor(player) {
     this.player = player
+    this.cannedPeasArray = player.game.cannedPeasPool.cannedPeasArray
   }
   update() {
     if (this.player.state === PlayerState.normal && this.collisionIsDetected())
@@ -16,6 +17,12 @@ export class PlayerCollision {
       !this.player.blinkHandler.checkCurrentBlink()
     )
       this.player.state = PlayerState.normal
+
+    if (
+      this.player.state === PlayerState.normal &&
+      this.cannedPeasCollisionIsDetected()
+    )
+      this.player.state = PlayerState.peaLoading
   }
 
   /**
@@ -41,6 +48,34 @@ export class PlayerCollision {
       this.player.disableAllPeas()
       this.player.decreaseLife()
       return true
+    }
+
+    return false
+  }
+
+  cannedPeasCollisionIsDetected = () => {
+    if (this.player.state !== PlayerState.normal) return false
+
+    for (const activeCannedPeas of this.cannedPeasArray.filter(
+      (cp) => cp.isActive
+    )) {
+      if (
+        activeCannedPeas.state !== CannedPeasState.normal ||
+        this.player.destinationX >
+          activeCannedPeas.destinationX + activeCannedPeas.frameWidth ||
+        this.player.destinationX + this.player.frameWidth <
+          activeCannedPeas.destinationX ||
+        this.player.destinationY >
+          activeCannedPeas.destinationY + activeCannedPeas.frameHeight ||
+        this.player.destinationY + this.player.frameHeight <
+          activeCannedPeas.destinationY
+      )
+        continue
+      else {
+        activeCannedPeas.state = CannedPeasState.disappearance
+        this.player.loadsAmmunition()
+        return true
+      }
     }
 
     return false

@@ -29,7 +29,7 @@ export class CannedPeas {
     this.appearanceBlinkHandler = new BlinkHandler(100, 7, this)
     this.disappearanceBlinkHandler = new BlinkHandler(100, 9, this)
 
-    this.timerAppearance = 6000
+    this.appearanceDuration = 6000
 
     this.initialize()
   }
@@ -56,10 +56,9 @@ export class CannedPeas {
   }
 
   update() {
-    this.timer += this.timestamp.delta
-
-    if (this.timer >= this.timerAppearance)
+    if (this.appearanceTimer >= this.appearanceDuration)
       this.state = CannedPeasState.disappearance
+    else this.appearanceTimer += this.timestamp.delta
 
     this.frameIndex =
       Math.floor(this.timestamp.current / this.fps) % this.framesLength
@@ -88,7 +87,7 @@ export class CannedPeas {
     this.destinationX = Math.random() * (this.gameWidth - this.frameWidth)
     this.destinationY = Math.random() * (this.gameHeight - this.frameHeight)
 
-    this.timer = 0
+    this.appearanceTimer = 0
   }
 
   /**
