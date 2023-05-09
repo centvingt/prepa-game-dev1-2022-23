@@ -11,7 +11,7 @@ import { PeaPool } from './pea/pea-pool.js'
 export class Player {
   image = document.querySelector('img.player-spritesheet')
 
-  speed = 5
+  speed = 3
 
   sourceX = 0
   sourceY = 0

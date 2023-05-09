@@ -1,5 +1,6 @@
 import { Game, GameState } from '../game.js'
 import { HudDisplayHandler } from '../handlers/hud-display-handler.js'
+import { PlayerState } from '../player/player.js'
 
 export class Level {
   /** @type {number} */ #_value
@@ -63,6 +64,9 @@ export class Level {
    */
   set gameState(newValue) {
     switch (newValue) {
+      case GameState.opening:
+        this.game.player.state = PlayerState.normal
+        this.game.player.isHidden = false
       case GameState.level1:
         this.value = 0
         this.maxValue = 20
