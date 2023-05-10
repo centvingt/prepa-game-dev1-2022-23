@@ -64,9 +64,6 @@ export class Level {
    */
   set gameState(newValue) {
     switch (newValue) {
-      case GameState.opening:
-        this.game.player.state = PlayerState.normal
-        this.game.player.isHidden = false
       case GameState.level1:
         this.value = 0
         this.maxValue = 20

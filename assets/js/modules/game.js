@@ -102,6 +102,8 @@ export class Game {
         case GameState.lost:
           this.bananaPool.disableAllBananas()
           this.state = GameState.opening
+          this.player.state = PlayerState.normal
+          this.player.isHidden = false
           break
         default:
           this.isPaused = !this.isPaused
