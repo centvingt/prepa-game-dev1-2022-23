@@ -158,6 +158,8 @@ export const GameState = Object.freeze({
   introLevel1: Symbol('introLevel1'),
   level1: Symbol('level1'),
   bossLevel1: Symbol('bossLevel1'),
+  level2: Symbol('level2'),
+  bossLevel2: Symbol('bossLevel2'),
   win: Symbol('win'),
   lost: Symbol('lost'),
 })

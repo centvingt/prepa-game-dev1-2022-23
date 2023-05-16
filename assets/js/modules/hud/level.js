@@ -47,6 +47,12 @@ export class Level {
           this.game.state = GameState.bossLevel1
           break
         case GameState.bossLevel1:
+          this.game.state = GameState.level2
+          break
+        case GameState.level2:
+          this.game.state = GameState.bossLevel2
+          break
+        case GameState.bossLevel2:
           this.game.state = GameState.win
           break
         default:
@@ -74,6 +80,18 @@ export class Level {
         this.value = 0
         this.maxValue = 10
         this.fromLabel.innerText = 'NIV 1'
+        this.toLabel.innerText = 'BOSS'
+        break
+      case GameState.level2:
+        this.value = 0
+        this.maxValue = 30
+        this.fromLabel.innerText = 'NIV 1'
+        this.toLabel.innerText = 'NIV 2'
+        break
+      case GameState.bossLevel2:
+        this.value = 0
+        this.maxValue = 15
+        this.fromLabel.innerText = 'NIV 2'
         this.toLabel.innerText = 'BOSS'
         break
       default:

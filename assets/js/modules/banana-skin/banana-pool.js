@@ -62,16 +62,23 @@ export class BananaPool {
         }
         break
       case GameState.bossLevel1:
-        if (this.angle > 400) {
-          if (this.timer >= this.nextBananaTime) {
-            let movement = BananaMovementHorizontalLinear
-            if (Math.random() > 0.3) movement = BananaMovementHorizontalWave
-            this.activateNewBanana(movement)
-            this.resetTimer()
-          } else {
-            this.timer += this.timestamp.delta
-          }
+      case GameState.level2:
+        if (
+          (this.game.state === GameState.bossLevel1 ||
+            this.game.state === GameState.level2) &&
+          this.angle < 400
+        )
+          break
+        if (this.timer >= this.nextBananaTime) {
+          let movement = BananaMovementHorizontalLinear
+          if (Math.random() > 0.3) movement = BananaMovementHorizontalWave
+          this.activateNewBanana(movement)
+          this.resetTimer()
+        } else {
+          this.timer += this.timestamp.delta
         }
+        break
+      case GameState.bossLevel2:
         break
       default:
         break
