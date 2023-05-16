@@ -2,6 +2,7 @@ import { Banana } from './banana.js'
 import { Game, GameState } from '../game.js'
 import { BananaMovementCircularAroundBoss } from './banana-movement-circular-around-boss.js'
 import { BananaMovementHorizontalLinear } from './banana-movement-Horizontal-linear.js'
+import { BananaMovementHorizontalWave } from './banana-movement-horizontal-wave.js'
 
 export class BananaPool {
   /** @type {GameState} */
@@ -53,12 +54,23 @@ export class BananaPool {
   render() {
     switch (this.game.state) {
       case GameState.level1:
-      case GameState.bossLevel1:
         if (this.timer >= this.nextBananaTime) {
           this.activateNewBanana(BananaMovementHorizontalLinear)
           this.resetTimer()
         } else {
           this.timer += this.timestamp.delta
+        }
+        break
+      case GameState.bossLevel1:
+        if (this.angle > 400) {
+          if (this.timer >= this.nextBananaTime) {
+            let movement = BananaMovementHorizontalLinear
+            if (Math.random() > 0.3) movement = BananaMovementHorizontalWave
+            this.activateNewBanana(movement)
+            this.resetTimer()
+          } else {
+            this.timer += this.timestamp.delta
+          }
         }
         break
       default:

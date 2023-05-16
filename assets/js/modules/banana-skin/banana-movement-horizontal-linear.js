@@ -1,4 +1,4 @@
-import { Banana, BananaState } from './banana.js'
+import { Banana } from './banana.js'
 
 export class BananaMovementHorizontalLinear {
   /**

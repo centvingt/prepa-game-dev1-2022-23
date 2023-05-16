@@ -26,11 +26,6 @@ export class Banana {
     this.frameWidth = 49
     this.frameHeight = 54
 
-    // const scaleFactor = Math.random() * 0.3 + 0.85
-    const scaleFactor = 1
-    this.destinationWidth = this.frameWidth * scaleFactor
-    this.destinationHeight = this.frameHeight * scaleFactor
-
     this.increaseScore = game.level.increaseValueBy
 
     this.blinkHandler = new BlinkHandler(100, 3, this)
@@ -78,6 +73,9 @@ export class Banana {
   }
 
   initialize(movement, index) {
+    this.destinationWidth = this.frameWidth
+    this.destinationHeight = this.frameHeight
+
     this.index = index
     /** @type {{update: () => void, start: boolean || undefined}} */ this.movement =
       new movement(this)
