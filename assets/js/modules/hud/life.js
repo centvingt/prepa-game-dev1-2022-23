@@ -32,7 +32,8 @@ export class Life {
    */
   set gameState(newValue) {
     this.hudDisplayHandler.setDisplay(newValue)
-    if (newValue === GameState.opening) this.value = 3
+    if (newValue === GameState.opening || newValue === GameState.level2)
+      this.value = 3
     this.setUi()
     this.#_gameState = newValue
   }
